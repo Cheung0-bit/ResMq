@@ -1,0 +1,40 @@
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      timeout: 6000
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
+
+logging:
+  level:
+    root: info
+
+res-mq:
+  enable: true
+  streams:
+    email-send:
+      topic: redis-topic
+      group: default-group
+    log-service:
+      topic: sys-log
+      group: default-group
+    order-service:
+      topic: order-service
+      group: nanjing-group
+    video-transcode:
+      topic: video-transcode
+      group: my-group
+  max-queue-size: 1000
+  dead-message-delivery-count: 1
+  dead-message-delivery-second: 1
+  dead-message-scheduled-thread-pool-core-size: 2
+  dead-message-timer-initial-delay: 1
+  dead-message-timer-delay: 1
+  pending-messages-pull-count: 10

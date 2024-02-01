@@ -1,0 +1,45 @@
+# 默认忽略文件和目录
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE生成的文件
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# 编译输出
+/build/
+/classes/
+/bin/
+
+# Maven生成的文件
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# 日志文件
+log/
+*.log
+
+# 工具配置文件
+mvnw
+mvnw.cmd
+mvnw.ps1
+mvn-wrapper.properties
+
+# 工程相关的文件
+*.iml
+*.ipr
+*.iws
+*.classpath
+*.project
+*.settings/
+.target/
+.classpath
+.project
+.settings/
+.vscode/

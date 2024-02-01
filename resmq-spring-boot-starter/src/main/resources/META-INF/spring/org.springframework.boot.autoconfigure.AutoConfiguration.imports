@@ -1,0 +1,2 @@
+io.github.resmq.starter.config.ResMqPreAutoConfiguration
+io.github.resmq.starter.config.ResMqPostAutoConfiguration

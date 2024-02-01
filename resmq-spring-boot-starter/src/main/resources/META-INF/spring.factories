@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.github.resmq.starter.config.ResMqPreAutoConfiguration,\
+io.github.resmq.starter.config.ResMqPostAutoConfiguration
