@@ -44,9 +44,10 @@ public class TopicsServiceImpl implements TopicsService {
         Set<String> keys = stringRedisTemplate.keys(Constants.TOPIC_PREFIX + "*");
         List<TopicInfo> topicInfos = new ArrayList<>();
         if (keys != null) {
-            log.info(Arrays.toString(keys.toArray()));
             for (String key : keys) {
-                topicInfos.add(this.getTopicInfo(key));
+                if (!key.contains("DLQ")) {
+                    topicInfos.add(this.getTopicInfo(key));
+                }
             }
         } else {
             log.info("topics为空");

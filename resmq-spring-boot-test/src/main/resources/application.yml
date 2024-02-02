@@ -35,6 +35,6 @@ res-mq:
   dead-message-delivery-count: 1
   dead-message-delivery-second: 1
   dead-message-scheduled-thread-pool-core-size: 2
-  dead-message-timer-initial-delay: 1
-  dead-message-timer-delay: 1
+  dead-message-timer-initial-delay: 300
+  dead-message-timer-delay: 300
   pending-messages-pull-count: 10

@@ -2,9 +2,10 @@ package io.github.resmq.dashboard.controller;
 
 import io.github.resmq.core.config.ResMqProperties;
 import io.github.resmq.core.constant.Constants;
-import io.github.resmq.dashboard.entity.GroupInfo;
-import io.github.resmq.dashboard.entity.TopicInfo;
+import io.github.resmq.dashboard.entity.*;
+import io.github.resmq.dashboard.service.DeadMessageService;
 import io.github.resmq.dashboard.service.IndexParamService;
+import io.github.resmq.dashboard.service.ScheduledService;
 import io.github.resmq.dashboard.service.TopicsService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,12 @@ public class BaseController {
 
     @Resource
     private TopicsService topicsService;
+
+    @Resource
+    private ScheduledService scheduledService;
+
+    @Resource
+    private DeadMessageService deadMessageService;
 
     @Value("${server.port:8080}")
     private int port;
@@ -60,6 +67,43 @@ public class BaseController {
         topicDetail.addObject("topicInfo", topicInfo);
         topicDetail.addObject("groupInfos", groupInfos);
         return topicDetail;
+    }
+
+    @GetMapping("scheduled")
+    public ModelAndView scheduled() {
+        ModelAndView scheduled = new ModelAndView("scheduled");
+        addBasicParam(scheduled);
+        List<ScheduledInfo> scheduledMessages = scheduledService.getScheduledMessages();
+        scheduled.addObject("scheduledMessages", scheduledMessages);
+        return scheduled;
+    }
+
+    @GetMapping("scheduled/{key}")
+    public ModelAndView scheduledTasks(@PathVariable("key") String key) {
+        ModelAndView scheduledTask = new ModelAndView("scheduled-task");
+        addBasicParam(scheduledTask);
+        List<ScheduledTask> scheduledTasks = scheduledService.getScheduledTasks(key);
+        scheduledTask.addObject("scheduledTasks", scheduledTasks);
+        scheduledTask.addObject("delayTopic", key);
+        return scheduledTask;
+    }
+
+    @GetMapping("dead")
+    public ModelAndView dead() {
+        ModelAndView dead = new ModelAndView("dead");
+        addBasicParam(dead);
+        List<DeadMessageSummary> dlq = deadMessageService.getDMSummary();
+        dead.addObject("dlq", dlq);
+        return dead;
+    }
+
+    @GetMapping("pending")
+    public ModelAndView pending() {
+        ModelAndView pending = new ModelAndView("pending");
+        addBasicParam(pending);
+        List<DeadMessageSummary> dlq = deadMessageService.getDMSummary();
+        pending.addObject("dlq", dlq);
+        return pending;
     }
 
     private void addBasicParam(ModelAndView modelAndView) {

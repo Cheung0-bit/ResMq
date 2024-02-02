@@ -51,27 +51,35 @@ public class TestController {
     }
 
     @ResMqListener(name = BUSINESS_NAME)
-    public void receiveMessage0(String message) {
-        log.info("Receive Message000--->{}", message);
-        throw new RuntimeException("error 111");
+    public void receiveByName(Email email) {
+        log.info("[{}]Receive Message--->{}", "through business name", email);
+        throw new RuntimeException("unAck error");
     }
-//
-//    @ResMqListener(
-//            topic = "redis-topic"
-//            , group = "dead-group"
-//    )
-//    public void receiveMessage1(String message) {
-//        log.info("Receive Message111--->{}", message);
-////        throw new RuntimeException("error 111");
-//    }
+    @ResMqListener(topic = TOPIC, group = "group1")
+    public void receiveByTopic1Group1(Email email) {
+        log.info("[{}]Receive Message--->{}", "through topic1 group1", email);
+        throw new RuntimeException("unAck error");
+    }
 
-    @ResMqListener(
-            topic = "redis-topic:DLQ:default-group"
-            , group = "default-group"
-    )
-    public void receiveDeadMessage(Email email) {
-        log.error("Receive Dead Message111--->{}", email);
+    @ResMqListener(topic = TOPIC, group = "group2")
+    public void receiveByTopic1Group2(Email email) {
+        log.info("[{}]Receive Message--->{}", "through topic1 group2", email);
+        throw new RuntimeException("unAck error");
     }
+
+    @ResMqListener(topic = "sys-log", group = "group1")
+    public void receiveByTopic2Group1(Email email) {
+        log.info("[{}]Receive Message--->{}", "through topic2 group1", email);
+        throw new RuntimeException("unAck error");
+    }
+
+//    @ResMqListener(
+//            topic = "redis-topic:DLQ:default-group"
+//            , group = "default-group"
+//    )
+//    public void receiveDeadMessage(Email email) {
+//        log.error("Receive Dead Message111--->{}", email);
+//    }
 
     @GetMapping("/mq/redis/sendDelayMessage")
     public void sendRedisDelayMessage() throws InterruptedException {
@@ -79,8 +87,8 @@ public class TestController {
             for (int j = 0; j < 5; j++) {
                 Email email = new Email("test email " + i + j, "something", "bruce");
                 try {
-                    resMqTemplate.syncDelaySend("order-service", email, 10, TimeUnit.SECONDS);
-                    resMqTemplate.syncDelaySend("video-transcode", email, 10, TimeUnit.SECONDS);
+                    resMqTemplate.syncDelaySend("order-service", email, 10, TimeUnit.HOURS);
+                    resMqTemplate.syncDelaySend("video-transcode", email, 10, TimeUnit.HOURS);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

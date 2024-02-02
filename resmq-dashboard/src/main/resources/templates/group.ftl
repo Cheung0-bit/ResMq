@@ -30,6 +30,11 @@
         </div>
     </div>
     <div class="container">
+        <div class="row">
+            <#if groupInfos?size==0>
+                <h2>No Groups Info...</h2>
+            </#if>
+        </div>
         <#list groupInfos as groupInfo>
             <div class="row table-responsive ">
                 <h2>${groupInfo.name}</h2>
