@@ -3,18 +3,18 @@ package io.github.resmq.core.annotation;
 import java.lang.annotation.*;
 
 /**
- * 消息监听
+ * Message Listening
  */
 @Target(value = {ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 public @interface ResMqListener {
-    /** 消息业务名称 */
+    /** message service name */
     String name() default "";
-    /** 设置消费者数量 */
+    /** set the number of consumers */
     int concurrentConsumers() default 1;
-    /** 主题topic */
+    /** topic */
     String topic() default "";
-    /** 消费分组 */
+    /** group of consumption */
     String group() default "";
 }

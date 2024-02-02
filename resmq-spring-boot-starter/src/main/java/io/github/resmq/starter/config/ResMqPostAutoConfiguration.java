@@ -33,10 +33,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * <后置配置>
+ * post auto configuration
  *
- * @Author zhanglin
- * @createTime 2024/1/30 16:27
+ * @author zhanglin
  */
 @Configuration
 @AutoConfigureAfter(ResMqPreAutoConfiguration.class)

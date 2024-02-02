@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * <主题服务类>
  *
- * @Author zhanglin
+ * @author zhanglin
  * @createTime 2024/2/1 13:13
  */
 public interface TopicsService {

@@ -1,16 +1,15 @@
 package io.github.resmq.core.config;
 
 /**
- * <简单主题分组参数>
+ * <Simple topic grouping parameter>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 16:00
+ * @author zhanglin
  */
 public class ResMqConfigurationProperties {
 
-    /** 消息主题，必填 */
+    /** Message subject, required */
     private String topic;
-    /** 消费者组，使用@ResMqListener时（接收消息），必填 */
+    /** Consumer group, when using @ResMqListener (to receive messages), required */
     private String group;
 
     public String getTopic() {

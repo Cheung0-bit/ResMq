@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * <主题信息>
  *
- * @Author zhanglin
+ * @author zhanglin
  * @createTime 2024/2/1 19:43
  */
 @Data

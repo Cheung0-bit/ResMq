@@ -14,16 +14,31 @@
     <packaging>jar</packaging>
     <name>resmq-spring-boot-starter</name>
     <description>resmq-spring-boot-starter</description>
-    <url>项目地址</url>
+    <url>https://github.com/Cheung0-bit/ResMq</url>
 
     <properties>
         <java.version>17</java.version>
     </properties>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version2.0</name>
+            <url>https://www.apache.org/licenses/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/Cheung0-bit/ResMq</url>
+        <connection>https://github.com/Cheung0-bit/ResMq.git</connection>
+        <developerConnection>https://github.com/Cheung0-bit</developerConnection>
+    </scm>
+
     <developers>
         <developer>
             <name>bruce zhang</name>
             <email>cheung0-bit@qq.com</email>
+            <url>https://cheung0-bit.github.io</url>
         </developer>
     </developers>
 
@@ -48,5 +63,57 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.1.2</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenEnabled>true</tokenEnabled>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

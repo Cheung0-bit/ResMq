@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * <>
  *
- * @Author zhanglin
+ * @author zhanglin
  * @createTime 2024/2/1 20:58
  */
 @Data

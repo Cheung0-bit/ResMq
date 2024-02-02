@@ -12,10 +12,9 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * <延迟消息定时处理>
+ * <Delay message timing processing>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 14:16
+ * @author zhanglin
  */
 public class ResMqDelayMessageTasker {
 

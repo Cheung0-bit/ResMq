@@ -3,10 +3,9 @@ package io.github.resmq.core.listener;
 import java.lang.reflect.Method;
 
 /**
- * <消息队列监听参数>
+ * <Message queue listen parameters>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 18:18
+ * @author zhanglin
  */
 public class ResMqListenerParam {
 
@@ -15,11 +14,11 @@ public class ResMqListenerParam {
     private String group;
 
     /**
-     * 注解@ResMqListener监听的Bean
+     * Annotate @ResMqListener listen to the Bean
      */
     private Object bean;
     /**
-     * 注解@ResMqListener监听的Bean的方法
+     * Annotate @ResMqListener methods on beans to listen to
      */
     private Method method;
 

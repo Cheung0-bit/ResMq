@@ -15,8 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * <Redis Stream消息队列模板实现>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 19:06
+ * @author zhanglin
  */
 public class ResMqTemplate extends MqTemplate {
 
@@ -29,7 +28,7 @@ public class ResMqTemplate extends MqTemplate {
     }
 
     /**
-     * 发送消息
+     * send message
      * xadd key MAXLEN ~ 1000 ID field string [field string ...]
      */
     private static final RedisScript<String> SCRIPT_MESSAGE =
@@ -87,20 +86,19 @@ public class ResMqTemplate extends MqTemplate {
      * 采用Zset实现延迟发送
      * zadd key [NX|XX] [CH] [INCR] score member [score member ...]
      *
-     * @param topic     主题
-     * @param message   消息
-     * @param delayTime 延迟时间
-     * @param timeUnit  延时时间单位
+     * @param topic     topic
+     * @param message   message
+     * @param delayTime delayTime
+     * @param timeUnit  timeUnit
      * @return
      */
     @Override
     public boolean syncDelaySend(String topic, Object message, int delayTime, TimeUnit timeUnit) {
-        //todo 延迟队列修正
         String str = toJsonStr(message);
         try {
             String key = Constants.DELAY_MESSAGE_TTL_PREFIX_KEY + topic;
             // 占位
-            stringRedisTemplate.opsForZSet().addIfAbsent(key, "placeholde", 0);
+            stringRedisTemplate.opsForZSet().addIfAbsent(key, "placeholder", 0);
             long timestamp = timeUnit.toSeconds(delayTime);
             long now = System.currentTimeMillis() / 1000;
             timestamp += now;

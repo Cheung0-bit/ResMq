@@ -7,15 +7,14 @@ import io.github.resmq.core.exception.ResMqException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <消息队列模板抽象>
+ * <Message queue template abstraction>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 18:24
+ * @author zhanglin
  */
 public abstract class MqTemplate {
 
     /**
-     * 任意类型对象序列化为JSON字符串
+     * Serialize an object of any type into a JSON string
      *
      * @param message
      * @return
@@ -25,35 +24,35 @@ public abstract class MqTemplate {
     }
 
     /**
-     * 同步发送消息
+     * Sending messages synchronously
      *
-     * @param topic   主题
-     * @param message 消息
+     * @param topic topic
+     * @param message message
      * @return
      */
     public abstract boolean syncSend(String topic, Object message);
 
     /**
-     * 同步发送延迟消息
+     * Send delayed messages synchronously
      *
-     * @param topic     主题
-     * @param message   消息
-     * @param delayTime 延迟时间
-     * @param timeUnit  延时时间单位
+     * @param topic     topic
+     * @param message   message
+     * @param delayTime delayTime
+     * @param timeUnit  timeUnit
      * @return
      */
     public boolean syncDelaySend(String topic, Object message, int delayTime, TimeUnit timeUnit) {
-        throw new ResMqException("未实现同步延迟消息发送");
+        throw new ResMqException("Synchronous delayed message delivery is not implemented");
     }
 
     /**
-     * 异步发送消息
+     * Sending messages asynchronously
      *
      * @param topic
      * @param message
      * @param sendCallback
      */
     public void asyncSend(String topic, Object message, SendCallback sendCallback) {
-        throw new ResMqException("未实现异步消息发送");
+        throw new ResMqException("Asynchronous message sending is not implemented");
     }
 }

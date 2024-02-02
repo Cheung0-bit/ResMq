@@ -6,15 +6,14 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * <消费者工具类>
+ * <consumer util>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 19:22
+ * @author zhanglin
  */
 public class ConsumerUtil {
 
     /**
-     * 取得Host的信息
+     * Get information about the Host
      *
      * @return
      */
@@ -27,16 +26,16 @@ public class ConsumerUtil {
     }
 
     /**
-     * 获取当前进程 PID
+     * Getting PID of the current process
      *
-     * @return 当前进程 ID
+     * @return PID
      */
     public static long getCurrentPid() {
         return Long.parseLong(getRuntimeMxBean().getName().split("@")[0]);
     }
 
     /**
-     * 返回Java虚拟机运行时系统相关属性
+     * Returns system-specific properties when the Java virtual Machine is running
      *
      * @return {@link RuntimeMXBean}
      */

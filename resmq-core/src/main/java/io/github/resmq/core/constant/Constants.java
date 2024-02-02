@@ -1,22 +1,21 @@
 package io.github.resmq.core.constant;
 
 /**
- * <常量>
+ * <Constant>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 14:28
+ * @author zhanglin
  */
 public class Constants {
-    /** Lua执行成功标志 */
+    /** Lua execution success flag */
     public static final String EXECUTE_SUCCESS = "OK";
     /**
-     * 配置文件前缀
+     * Configuration file prefix
      */
     public static final String CONFIGURATION_KEY = "_resmq:properties";
-    /** RedisTemplate 消息队列主题统一前缀 */
+    /** RedisTemplate Message queue topic uniform prefix */
     public static final String TOPIC_PREFIX = "io:github:resmq:";
 
-    /** RedisTemplate 延迟消息队列TTL key的前缀 */
+    /** RedisTemplate Delays the prefix of the message queue TTL key */
     public static final String DELAY_MESSAGE_TTL_PREFIX_KEY = "DM:TTL:";
 
 }

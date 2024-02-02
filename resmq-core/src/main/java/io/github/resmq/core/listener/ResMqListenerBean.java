@@ -11,18 +11,17 @@ import java.lang.reflect.Method;
 /**
  * <Redis Mq 监听实现>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 15:28
+ * @author zhanglin
  */
 public class ResMqListenerBean extends ResMqListenerAdapter<String> implements StreamListener<String, MapRecord<String, String, String>> {
 
     private final StringRedisTemplate stringRedisTemplate;
     /**
-     * 主题
+     * topic
      */
     private final String destination;
     /**
-     * 消费组
+     * Consumer Group
      */
     private final String group;
 

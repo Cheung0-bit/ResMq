@@ -4,10 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <组建自定义异常>
+ * <Build custom exceptions>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 16:13
+ * @author zhanglin
  */
 public class ResMqException extends RuntimeException {
 

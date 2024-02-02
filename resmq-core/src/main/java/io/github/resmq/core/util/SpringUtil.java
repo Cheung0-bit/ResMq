@@ -16,19 +16,18 @@ import java.util.Map;
 /**
  * <Spring工具>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 14:43
+ * @author zhanglin
  */
 @Component
 public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextAware {
 
     /**
-     * "@PostConstruct"注解标记的类中，由于ApplicationContext还未加载，导致空指针<br>
-     * 因此实现BeanFactoryPostProcessor注入ConfigurableListableBeanFactory实现bean的操作
+     * The "@PostConstruct" annotation marks a class with a null pointer because the ApplicationContext has not yet been loaded<br>
+     * So spring BeanFactoryPostProcessor pumped ConfigurableListableBeanFactory implementation bean operation
      */
     private static ConfigurableListableBeanFactory beanFactory;
     /**
-     * Spring应用上下文环境
+     * The Spring application context
      */
     private static ApplicationContext applicationContext;
 
@@ -80,10 +79,10 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     //通过name获取 Bean.
 
     /**
-     * 通过name获取 Bean
+     * Get the Bean by name
      *
-     * @param <T>  Bean类型
-     * @param name Bean名称
+     * @param <T>  Bean Type
+     * @param name Bean Name
      * @return Bean
      */
     @SuppressWarnings("unchecked")
@@ -92,10 +91,10 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 通过class获取Bean
+     * obtain bean by class
      *
-     * @param <T>   Bean类型
-     * @param clazz Bean类
+     * @param <T>   Bean Type
+     * @param clazz Bean Class
      * @return Bean对象
      */
     public static <T> T getBean(Class<T> clazz) {
@@ -103,11 +102,11 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 通过name,以及Clazz返回指定的Bean
+     * Returns the specified Bean by name and Clazz
      *
-     * @param <T>   bean类型
-     * @param name  Bean名称
-     * @param clazz bean类型
+     * @param <T>   bean type
+     * @param name  Bean name
+     * @param clazz bean class
      * @return Bean对象
      */
     public static <T> T getBean(String name, Class<T> clazz) {
@@ -115,31 +114,31 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 获取指定类型对应的所有Bean，包括子类
+     * Retrieves all beans of the specified type, including subclasses
      *
-     * @param <T>  Bean类型
-     * @param type 类、接口，null表示获取所有bean
-     * @return 类型对应的bean，key是bean注册的name，value是Bean
+     * @param <T>  Bean Type
+     * @param type Class, interface, null means get all beans
+     * @return The key is the registered name of the Bean, and the value is the bean
      */
     public static <T> Map<String, T> getBeansOfType(Class<T> type) {
         return getBeanFactory().getBeansOfType(type);
     }
 
     /**
-     * 获取指定类型对应的Bean名称，包括子类
+     * Gets the Bean name for the specified type, including subclasses
      *
-     * @param type 类、接口，null表示获取所有bean名称
-     * @return bean名称
+     * @param type Class, interface, null to get all bean names
+     * @return bean name
      */
     public static String[] getBeanNamesForType(Class<?> type) {
         return getBeanFactory().getBeanNamesForType(type);
     }
 
     /**
-     * 获取配置文件配置项的值
+     * Gets the value of the configuration item of the configuration file
      *
-     * @param key 配置项key
-     * @return 属性值
+     * @param key Configuration key
+     * @return Attribute values
      */
     public static String getProperty(String key) {
         if (null == applicationContext) {
@@ -149,9 +148,9 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 获取当前的环境配置，无配置返回null
+     * Gets the current environment config; null is returned if no configuration is available
      *
-     * @return 当前的环境配置
+     * @return The current environment configuration
      */
     public static String[] getActiveProfiles() {
         if (null == applicationContext) {
@@ -161,9 +160,9 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 获取当前的环境配置，当有多个环境配置时，只获取第一个
+     * Get the current environment configuration, and when there are multiple environment configurations, only get the first one
      *
-     * @return 当前的环境配置
+     * @return The current environment configuration
      */
     public static String getActiveProfile() {
         final String[] activeProfiles = getActiveProfiles();
@@ -171,9 +170,9 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 动态向Spring注册Bean
+     * Beans are dynamically registered with Spring
      * <p>
-     * 由{@link org.springframework.beans.factory.BeanFactory} 实现，通过工具开放API
+     * {@link org.springframework.beans.factory.BeanFactory}
      * <p>
      *
      * @param <T>      Bean类型
@@ -187,10 +186,10 @@ public class SpringUtil implements BeanFactoryPostProcessor, ApplicationContextA
     }
 
     /**
-     * 注销bean
-     * 将Spring中的bean注销，请谨慎使用
+     * Logging out beans
+     * Use caution when logging out Spring beans
      *
-     * @param beanName bean名称
+     * @param beanName bean name
      */
     public static void unregisterBean(String beanName) {
         final ConfigurableListableBeanFactory factory = getConfigurableBeanFactory();

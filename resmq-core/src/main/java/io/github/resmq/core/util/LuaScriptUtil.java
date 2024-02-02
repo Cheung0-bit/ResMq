@@ -13,37 +13,36 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * <Lua脚本工具类>
+ * <Lua util>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 13:10
+ * @author zhanglin
  */
 @SuppressWarnings("rawtypes")
 public class LuaScriptUtil {
 
     /**
-     * 获取消费者组
+     * Obtaining groups of consumers
      * xinfo GROUPS key
      */
     public static final RedisScript<List> SCRIPT_GROUP = new DefaultRedisScript<>("return redis.call('xinfo', 'GROUPS', KEYS[1])", List.class);
     /**
-     * 创建消费者组 MKSTREAM解决topic不存在的问题
+     * Create a consumer group MKSTREAM to solve the problem that topic doesn't exist
      * xgroup CREATE key groupname id-or-$ MKSTREAM
      */
     public static final RedisScript<String> SCRIPT_CREATE_GROUP = new DefaultRedisScript<>("return redis.call('xgroup', 'create', KEYS[1], ARGV[1], ARGV[2], 'MKSTREAM')", String.class);
     /**
-     * 获取消费者组未ack消息的汇总信息
+     * Gets a summary of unACK messages for the consumer group
      * xpending key group
      */
     public static final RedisScript<List> SCRIPT_PENDING_GROUP = new DefaultRedisScript<>("local msg=redis.call('xpending', KEYS[1], ARGV[1]) return msg", List.class);
     /**
-     * 获取消费者组里消费者未ack消息的摘要
+     * Gets a summary of unACK messages from consumers in a consumer group
      * xpending key group start end count consumer
      */
     public static final RedisScript<List> SCRIPT_PENDING_GROUP_CONSUMER = new DefaultRedisScript<>("local msg=redis.call('xpending', KEYS[1], ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5]) return msg", List.class);
 
     /**
-     * 获取主题里的消费者组
+     * Get the consumer group for the topic
      *
      * @param topic
      * @param stringRedisTemplate
@@ -61,7 +60,7 @@ public class LuaScriptUtil {
     }
 
     /**
-     * 创建消费者组
+     * Creating a Consumer group
      *
      * @param topic
      * @param readOffset
@@ -75,10 +74,10 @@ public class LuaScriptUtil {
     }
 
     /**
-     * 获取消费者组未ack消息的汇总信息
+     * Gets a summary of unACK messages for the consumer group
      *
-     * @param topic 主题
-     * @param group 消费者组
+     * @param topic topic
+     * @param group group
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -105,13 +104,13 @@ public class LuaScriptUtil {
     }
 
     /**
-     * 获取消费者组里消费者未ack消息的摘要
+     * Gets a summary of unACK messages from consumers in a consumer group
      *
-     * @param topic    主题
-     * @param group    消费者组
-     * @param consumer 消费者
-     * @param range    消息ID范围
-     * @param count    返回记录数
+     * @param topic    topic
+     * @param group    group
+     * @param consumer consumer
+     * @param range    range
+     * @param count    count
      * @return
      */
     public static PendingMessages getPendingMessages(String topic, String group, String consumer, Range<?> range, long count, StringRedisTemplate stringRedisTemplate) {

@@ -9,10 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * <监听消息队列适配器>
+ * <Listen to the message queue adapter>
  *
- * @Author zhanglin
- * @createTime 2024/1/29 18:12
+ * @author zhanglin
  */
 public class ResMqListenerAdapter<T> implements ResMqListener<T> {
 

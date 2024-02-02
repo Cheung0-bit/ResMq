@@ -4,55 +4,54 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <用户自定义参数>
+ * <User-defined parameters>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 15:56
+ * @author zhanglin
  */
 public class ResMqProperties {
 
     /**
-     * 是否开启，默认为 true 开启
+     * Enabled or not. The default value is true
      */
     private boolean enable = true;
 
     /**
-     * 消息队列配置，key：业务名称
+     * Message queue configuration, key: business name
      */
     private Map<String, ResMqConfigurationProperties> streams = new HashMap<>();
 
     /**
-     * stream积压阈值
+     * stream backlog threshold
      */
     private int maxQueueSize = 1000;
 
     /**
-     * 死信消息转移阈值
+     * Dead-letter message transfer threshold
      */
     private long deadMessageDeliveryCount = 1;
 
     /**
-     * 死信消息时间阈值
+     * Dead letter message time threshold
      */
     private long deadMessageDeliverySecond = 60;
 
     /**
-     * 死信处理线程池核心线程数
+     * Dead letter processing thread pool number of core threads
      */
     private int deadMessageScheduledThreadPoolCoreSize = 2;
 
     /**
-     * 死信任务触发初始时间
+     * Dead-letter task triggering initial time
      */
     private long deadMessageTimerInitialDelay = 30;
 
     /**
-     * 死信任务间隔时间
+     * Dead letter task interval time
      */
     private long deadMessageTimerDelay = 30;
 
     /**
-     * 每次pending列表消息拉取个数
+     * The number of pending list messages pulled each time
      */
     private long pendingMessagesPullCount = 10;
 

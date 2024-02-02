@@ -18,10 +18,9 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * <死信定时处理>
+ * <Handle dead messages at regular intervals>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 14:17
+ * @author zhanglin
  */
 public class ResMqDeadMessageTasker {
 
@@ -29,8 +28,8 @@ public class ResMqDeadMessageTasker {
     private ScheduledExecutorService timer;
     private final StringRedisTemplate stringRedisTemplate;
     /**
-     * 1 ACK Pending队列中的已读取未ACK消息
-     * 2 投递到死信队列中 等待消费者后续处理
+     * 1 ACK unACK messages in the Pending queue
+     * 2 It is delivered to the dead message queue for subsequent processing by the consumer
      */
     private static final RedisScript<String> SCRIPT_DEAD_MESSAGE =
             new DefaultRedisScript<>(
@@ -44,15 +43,15 @@ public class ResMqDeadMessageTasker {
                     , String.class
             );
     /**
-     * 监听的主题
+     * Topics to listen for
      */
     private final Set<String> topics;
     /**
-     * 判断为死信：消息消费次数
+     * Judged as dead letter: number of message consumption
      */
     private final long deadMessageDeliveryCount;
     /**
-     * 判断为死信：消息消费时间单位秒
+     * Judged dead letter: message consumption time unit in seconds
      */
     private final long deadMessageDeliverySecond;
 
@@ -105,33 +104,32 @@ public class ResMqDeadMessageTasker {
             try {
                 StreamOperations<String, String, String> streamOperations = stringRedisTemplate.opsForStream();
                 for (String topic : topics) {
-                    // 获取消费者组
+                    // Obtaining groups of consumers
                     StreamInfo.XInfoGroups groups = LuaScriptUtil.getInfoGroups(topic, stringRedisTemplate);
                     if (groups == null) {
                         continue;
                     }
                     for (StreamInfo.XInfoGroup group : groups) {
-                        Long pendingCount = group.pendingCount();// 未ack的消息
+                        Long pendingCount = group.pendingCount();// unAcked Messages
                         if (pendingCount > 0) {
                             String groupName = group.groupName();
-                            // 死信队列topic
-                            // todo: 死信队列测试
+                            // Dead message queue topic
                             String deadTopic = topic + ":DLQ:" + groupName;
-                            // 获取消费者组里的pending消息
+                            // Get pending messages in the consumer group
                             PendingMessagesSummary pendingMessagesSummary = LuaScriptUtil.getPendingMessagesSummary(topic, groupName, stringRedisTemplate);
-                            // 每个消费者的pending消息数量
+                            // Number of pending messages per consumer
                             Map<String, Long> pendingMessagesPerConsumer = null;
                             if (pendingMessagesSummary != null) {
                                 pendingMessagesPerConsumer = pendingMessagesSummary.getPendingMessagesPerConsumer();
                                 pendingMessagesPerConsumer.forEach((consumer, value) -> {
-                                    // 消费者的pending消息数量
+                                    // Number of pending messages for consumers
                                     long consumerTotalPendingMessages = value;
                                     if (consumerTotalPendingMessages > 0) {
-                                        // 读取消费者pending队列的前10条记录，从ID=0的记录开始，一直到ID最大值，一次处理10条
+                                        // Read the first 10 records from the consumer's pending queue, starting with the record with ID=0 and working up to the maximum ID, processing 10 at a time
                                         PendingMessages pendingMessages = LuaScriptUtil.getPendingMessages(topic, groupName, consumer, Range.closed("0", "+"), SpringUtil.getBean(ResMqProperties.class).getPendingMessagesPullCount(), stringRedisTemplate);
-                                        // 遍历所有Pending消息的详情
+                                        // Iterate over the details of all Pending messages
                                         pendingMessages.forEach(message ->
-                                                // 消息的ID
+                                                // ID of the message
                                                 executeDeadMessage(streamOperations, topic, groupName, deadTopic, message)
                                         );
                                     }
@@ -149,12 +147,12 @@ public class ResMqDeadMessageTasker {
                                         PendingMessage message) {
             String flag = "-";
             String messageId = message.getIdAsString();
-            // 消息投递一次消费的时间
+            // The time consumed for a message delivery
             Duration elapsedTimeSinceLastDelivery = message.getElapsedTimeSinceLastDelivery();
-            // 在多个消费者中投递的次数
+            // The number of deliveries in multiple consumers
             long deliveryCount = message.getTotalDeliveryCount();
             String consumerName = message.getConsumerName();
-            // 是否死信消息
+            // Whether the message is dead letter or not
             if (deliveryCount > deadMessageDeliveryCount || elapsedTimeSinceLastDelivery.getSeconds() > deadMessageDeliverySecond) {
                 // 获取消息内容
                 List<MapRecord<String, String, String>> result = streamOperations
@@ -164,7 +162,7 @@ public class ResMqDeadMessageTasker {
                     logger.warn("Dead Message: topic={}, group={}, consumer={}, id={}, deliveryCount={}, deliveryTimer={}",
                             topic, groupName, consumerName, messageId, deliveryCount, elapsedTimeSinceLastDelivery.getSeconds());
                     String msg = mapRecord.getValue().values().iterator().next();
-                    // ack并放入死信队列
+                    // ack and put into the dead message queue
                     // Lua
                     Object deadMessageFlag = stringRedisTemplate.execute(
                             SCRIPT_DEAD_MESSAGE,
@@ -174,7 +172,7 @@ public class ResMqDeadMessageTasker {
                             groupName, messageId,
                             String.valueOf(SpringUtil.getBean(ResMqProperties.class).getMaxQueueSize()), msg
                     );
-                    // 判断是否添加到了死信队列中
+                    // Check if it was added to the dead message queue
                     if (deadMessageFlag != null && deadMessageFlag.toString().contains(flag)) {
                         logger.info("Dead Message ok->topic:{}, id={}", deadTopic, deadMessageFlag);
                     } else {

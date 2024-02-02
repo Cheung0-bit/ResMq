@@ -24,10 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <Bean后置处理>
+ * <Bean post process>
  *
- * @Author zhanglin
- * @createTime 2024/1/30 16:32
+ * @author zhanglin
  */
 public class ResMqListenerAnnotationBeanPostProcessor implements BeanPostProcessor {
 
@@ -53,7 +52,7 @@ public class ResMqListenerAnnotationBeanPostProcessor implements BeanPostProcess
         return bean;
     }
 
-    // 查找给定元素（AnnotatedElement）上的 ResMqListener 注解
+    // Find the ResMqListener annotation on the given element (AnnotatedElement)
     private Collection<ResMqListener> findListenerAnnotations(AnnotatedElement element) {
         return MergedAnnotations.from(element, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY).stream(ResMqListener.class).map(MergedAnnotation::synthesize)
                 .collect(Collectors.toList());
@@ -72,7 +71,7 @@ public class ResMqListenerAnnotationBeanPostProcessor implements BeanPostProcess
     }
 
     private void buildMqListenerParam(Object bean, ListenerMethod listenerMethod, ResMqListener resMqListener, ResMqProperties resMqProperties) {
-        // 消息的业务名称
+        // The business name of the message
         String name = resMqListener.name();
         // 消息主题
         String topic = resMqListener.topic();
@@ -81,13 +80,13 @@ public class ResMqListenerAnnotationBeanPostProcessor implements BeanPostProcess
         boolean nameFlag = StringUtils.hasText(name);
         boolean topicFlag = StringUtils.hasText(topic);
         boolean groupFlag = StringUtils.hasText(group);
-        // 1、设置消息主题、消费者组 注解直接配置优先级更高
+        // 1.Setting message subject, consumer group annotation direct configuration has higher priority
         if (topicFlag && groupFlag) {
             ResMqListenerParam resMqListenerParam = new ResMqListenerParam();
             resMqListenerParam.setTopic(Constants.TOPIC_PREFIX + topic).setGroup(group).setBean(bean).setMethod(listenerMethod.method);
             resMqListenerParamList.add(resMqListenerParam);
         } else if (nameFlag) {
-            // 2、设置消息业务名称
+            // 2.Set the message service name
             ResMqConfigurationProperties resMqConfigurationProperties = resMqProperties.getStreams().get(name);
             Assert.isTrue(null != resMqConfigurationProperties, "@ResMqListener attribute name is [" + name + "], not found in the configuration [res-mq.streams." + name + "],[" + bean.getClass().getName() + "],[" + listenerMethod.method.getName() + "]");
             topic = resMqConfigurationProperties.getTopic();
@@ -98,7 +97,7 @@ public class ResMqListenerAnnotationBeanPostProcessor implements BeanPostProcess
             resMqListenerParam.setTopic(Constants.TOPIC_PREFIX + topic).setGroup(group).setBean(bean).setMethod(listenerMethod.method);
             resMqListenerParamList.add(resMqListenerParam);
         } else {
-            // @ResMqListener 中 topic 或 group 只设置一个
+            // In @ResMqListener, only one topic or group is set
             throw new ResMqException("Please specific [topic] and [group] under @MqListener,[" + bean.getClass().getName() + "],[" + listenerMethod.method.getName() + "]");
         }
 

@@ -1,20 +1,16 @@
 package io.github.resmq.starter.config;
 
-import com.alibaba.fastjson.JSON;
 import io.github.resmq.core.annotation.ResMqListenerAnnotationBeanPostProcessor;
 import io.github.resmq.core.config.ResMqProperties;
-import io.github.resmq.core.constant.Constants;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
- * <预先配置>
+ * pre auto configuration
  *
- * @Author zhanglin
- * @createTime 2024/1/30 16:25
+ * @author zhanglin
  */
 @Configuration
 @ConditionalOnProperty(name = "res-mq.enable", havingValue = "true")
