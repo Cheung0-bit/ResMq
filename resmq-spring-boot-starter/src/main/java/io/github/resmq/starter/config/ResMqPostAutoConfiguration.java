@@ -130,7 +130,6 @@ public class ResMqPostAutoConfiguration {
                 .cancelOnError(throwable -> false);
         container.register(builder.build(), new ResMqListenerBean(resMqListenerParam.getMethod(), resMqListenerParam.getBean()
                 , stringRedisTemplate, topic, group));
-        // todo 修改日志打印方式
         logger.info("Init ResMqListener, bean={}, method={}, topic={}, group={}", resMqListenerParam.getMethod().getName()
                 , resMqListenerParam.getBean().getClass()
                 , topic.substring(Constants.TOPIC_PREFIX.length()), group);

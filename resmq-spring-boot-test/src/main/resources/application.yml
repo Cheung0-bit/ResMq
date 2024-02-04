@@ -17,7 +17,9 @@ logging:
     root: info
 
 res-mq:
+  # ------- Required -------
   enable: true
+  # ------- Optional -------
   streams:
     email-send:
       topic: redis-topic
