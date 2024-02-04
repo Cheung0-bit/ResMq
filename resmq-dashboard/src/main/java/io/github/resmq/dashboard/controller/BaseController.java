@@ -3,10 +3,7 @@ package io.github.resmq.dashboard.controller;
 import io.github.resmq.core.config.ResMqProperties;
 import io.github.resmq.core.constant.Constants;
 import io.github.resmq.dashboard.entity.*;
-import io.github.resmq.dashboard.service.DeadMessageService;
-import io.github.resmq.dashboard.service.IndexParamService;
-import io.github.resmq.dashboard.service.ScheduledService;
-import io.github.resmq.dashboard.service.TopicsService;
+import io.github.resmq.dashboard.service.*;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -36,6 +33,9 @@ public class BaseController {
 
     @Resource
     private DeadMessageService deadMessageService;
+
+    @Resource
+    private PendingService pendingService;
 
     @Value("${server.port:8080}")
     private int port;
@@ -92,7 +92,7 @@ public class BaseController {
     public ModelAndView dead() {
         ModelAndView dead = new ModelAndView("dead");
         addBasicParam(dead);
-        List<DeadMessageSummary> dlq = deadMessageService.getDMSummary();
+        List<CommonMessageSummary> dlq = deadMessageService.getDMSummary();
         dead.addObject("dlq", dlq);
         return dead;
     }
@@ -101,8 +101,8 @@ public class BaseController {
     public ModelAndView pending() {
         ModelAndView pending = new ModelAndView("pending");
         addBasicParam(pending);
-        List<DeadMessageSummary> dlq = deadMessageService.getDMSummary();
-        pending.addObject("dlq", dlq);
+        List<CommonMessageSummary> pdm = pendingService.getPendingSummary();
+        pending.addObject("pdm", pdm);
         return pending;
     }
 

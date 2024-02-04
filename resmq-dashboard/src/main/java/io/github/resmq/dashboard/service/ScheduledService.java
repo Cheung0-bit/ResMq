@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * <>
  *
- * @Author zhanglin
+ * @author zhanglin
  * @createTime 2024/2/2 14:55
  */
 public interface ScheduledService {

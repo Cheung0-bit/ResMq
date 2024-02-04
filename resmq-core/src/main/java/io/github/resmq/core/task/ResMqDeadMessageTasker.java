@@ -104,7 +104,6 @@ public class ResMqDeadMessageTasker {
             try {
                 StreamOperations<String, String, String> streamOperations = stringRedisTemplate.opsForStream();
                 for (String topic : topics) {
-                    // todo 排除死信队列
                     if (topic.contains("DLQ")) {
                         continue;
                     }

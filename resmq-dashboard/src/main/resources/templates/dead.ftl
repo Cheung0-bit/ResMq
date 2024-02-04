@@ -9,8 +9,8 @@
         <#else>
             <#list dlq as messageSummary>
                 <h2 class="text-danger">${messageSummary.originTopic}</h2>
-                <#list messageSummary.deadGroupMessages as deadGroupMessage>
-                    <h4 class="text-warning">${deadGroupMessage.groupName}</h4>
+                <#list messageSummary.commonGroupMessages as commonGroupMessage>
+                    <h4 class="text-warning">${commonGroupMessage.groupName}</h4>
                     <div class="row table-responsive ">
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -20,7 +20,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <#list deadGroupMessage.deadMessages as deadMessage>
+                            <#list commonGroupMessage.commonMessages as deadMessage>
                                 <tr>
                                     <td>${deadMessage.id}</td>
                                     <td>${deadMessage.message}</td>

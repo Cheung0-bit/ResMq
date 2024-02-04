@@ -7,14 +7,14 @@ import java.util.List;
 /**
  * <>
  *
- * @Author zhanglin
+ * @author zhanglin
  * @createTime 2024/2/2 19:19
  */
 @Data
-public class DeadGroupMessage {
+public class CommonGroupMessage {
 
     private String groupName;
 
-    private List<DeadMessage> deadMessages;
+    private List<CommonMessage> commonMessages;
 
 }

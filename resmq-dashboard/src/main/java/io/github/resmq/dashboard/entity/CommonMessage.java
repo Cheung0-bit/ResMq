@@ -6,12 +6,12 @@ import lombok.Data;
 /**
  * <>
  *
- * @Author zhanglin
+ * @author zhanglin
  * @createTime 2024/2/2 18:45
  */
 @Data
 @AllArgsConstructor
-public class DeadMessage {
+public class CommonMessage {
 
     private String id;
 
