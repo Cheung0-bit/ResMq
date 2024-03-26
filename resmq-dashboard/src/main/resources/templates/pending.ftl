@@ -1,6 +1,6 @@
 <#import "base.ftl" as base>
 <@base.head>
-    <#assign deadActive="active" in base>
+    <#assign pendingActive="active" in base>
 </@base.head>
 <@base.body>
     <div class="container">

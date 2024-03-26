@@ -27,5 +27,8 @@
                 </li>
             </ul>
         </nav>
+        <div id="language-switcher" class="navbar-text">
+            <button class="btn btn-outline-primary">中文</button>
+        </div>
     </div>
 </header>

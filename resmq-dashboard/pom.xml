@@ -10,7 +10,7 @@
     </parent>
     <groupId>io.github.cheung0-bit</groupId>
     <artifactId>resmq-dashboard</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>resmq-dashboard</name>
     <description>resmq-dashboard</description>
     <properties>
