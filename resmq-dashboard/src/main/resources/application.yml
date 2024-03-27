@@ -1,7 +1,14 @@
 server:
   port: 8090
+  servlet:
+    context-path: /resmq
 
 spring:
+  mvc:
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: classpath:/static/
   data:
     redis:
       host: 127.0.0.1
