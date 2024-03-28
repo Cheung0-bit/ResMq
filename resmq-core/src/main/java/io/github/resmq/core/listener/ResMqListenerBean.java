@@ -1,5 +1,6 @@
 package io.github.resmq.core.listener;
 
+import io.github.resmq.core.constant.Constants;
 import io.github.resmq.core.exception.ResMqException;
 import org.springframework.data.redis.connection.stream.MapRecord;
 import org.springframework.data.redis.connection.stream.RecordId;
@@ -39,6 +40,10 @@ public class ResMqListenerBean extends ResMqListenerAdapter<String> implements S
             super.receiveMessage(message.getValue().get("message"));
             // 出现异常 就会ACK失败 待加入死信队列
             stringRedisTemplate.opsForStream().acknowledge(destination, group, recordId);
+            // 计数器 todo 原子性
+            long timestamp = System.currentTimeMillis() / (24 * 60 * 60 * 1000);
+            String key = Constants.MESSAGE_COUNT_KEY + timestamp + ":" + destination.substring(Constants.TOPIC_PREFIX.length());
+            stringRedisTemplate.opsForHash().increment(key, "ack-count", 1);
         } catch (Exception e) {
             throw new ResMqException(e.getMessage());
         }

@@ -123,12 +123,12 @@
 
 <#macro commonFooter >
     <footer class="main-footer">
-        Powered by <b>XXL-MQ</b> 1.3.0-SNAPSHOT
+        Powered by <b>ResMq</b> 1.0.3
         <div class="pull-right hidden-xs">
-            <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
-                <a href="https://www.xuxueli.com/" target="_blank">xuxueli</a>
+            <strong>Copyright &copy; 2023-${.now?string('yyyy')} &nbsp;
+                <a href="https://cheung0.gitee.io/" target="_blank">张林</a>
                 &nbsp;
-                <a href="https://github.com/xuxueli/xxl-mq" target="_blank">github</a>
+                <a href="https://github.com/cheung0-bit/resmq" target="_blank">github</a>
             </strong><!-- All rights reserved. -->
         </div>
     </footer>

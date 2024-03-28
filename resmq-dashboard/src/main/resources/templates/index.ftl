@@ -5,9 +5,10 @@
     <title>消息队列中心</title>
     <@netCommon.commonStyle />
     <!-- daterangepicker -->
-    <link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet"
+          href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 </head>
-<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxlmq_adminlte_settings"]?exists && "off" == cookieMap["xxlmq_adminlte_settings"].value >sidebar-collapse</#if> ">
+<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?? && cookieMap["resmq_adminlte_settings"]?exists && "off" == cookieMap["resmq_adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -26,58 +27,58 @@
 
             <!-- 报表导航 -->
             <div class="row">
-
-                <#-- 业务线 -->
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="info-box bg-aqua">
-                        <span class="info-box-icon"><i class="fa fa-flag-o"></i></span>
-
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-blue">
+                        <span class="info-box-icon"><i class="fa fa-folder"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">业务线数量</span>
-                            <span class="info-box-number">${bizCount}</span>
-
+                            <span class="info-box-text">主题数量</span>
+                            <span class="info-box-number">4</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
-                            <span class="progress-description">接入的业务线数量</span>
+                            <span class="progress-description">消息队列主题数量</span>
                         </div>
                     </div>
                 </div>
-
-                <#-- 消息主题 -->
-                <div class="col-md-4 col-sm-6 col-xs-12" >
-                    <div class="info-box bg-yellow">
-                        <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">消息主题数量</span>
-                            <span class="info-box-number">${topicCount}</span>
-
-                            <div class="progress">
-                                <div class="progress-bar" style="width: 100%" ></div>
-                            </div>
-                            <span class="progress-description">接入的消息主题数量</span>
-                        </div>
-                    </div>
-                </div>
-
-                <#-- 消息 -->
-                <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-green">
-                        <span class="info-box-icon"><i class="fa ion-ios-settings-strong"></i></span>
-
+                        <span class="info-box-icon"><i class="fa fa-inbox"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">消息数量</span>
-                            <span class="info-box-number">${messageCount}</span>
-
+                            <span class="info-box-text">消息总量</span>
+                            <span class="info-box-number">4</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
-                            <span class="progress-description">在线消息数量</span>
+                            <span class="progress-description">已经投递到主题中的消息总量</span>
                         </div>
                     </div>
                 </div>
-
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">延迟消息</span>
+                            <span class="info-box-number">4</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">待投递的消息总量</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-red">
+                        <span class="info-box-icon"><i class="fa fa-exclamation-circle"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">死信总量</span>
+                            <span class="info-box-number">4</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">死信队列中的消息总量</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <#-- 消息报表：时间区间筛选，左侧折线图 + 右侧饼图 -->
@@ -87,13 +88,12 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">消息报表</h3>
 
-                            <!-- tools box -->
                             <div class="pull-right box-tools">
-                                <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" id="filterTime" >
+                                <button type="button" class="btn btn-primary btn-sm daterange pull-right"
+                                        data-toggle="tooltip" id="filterTime">
                                     <i class="fa fa-calendar"></i>
                                 </button>
                             </div>
-                            <!-- /. tools -->
 
                         </div>
                         <div class="box-body">
@@ -112,12 +112,41 @@
                 </div>
             </div>
 
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+            <#-- 系统参数表 -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">系统运行参数</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <table id="runtimeProperties" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>参数名</th>
+                                        <th>参数值</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Data 1</td>
+                                        <td>Data 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Data 3</td>
+                                        <td>Data 4</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- footer -->
+        </section>
+    </div>
     <@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />

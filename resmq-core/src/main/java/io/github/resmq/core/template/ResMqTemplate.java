@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -38,24 +40,6 @@ public class ResMqTemplate extends MqTemplate {
                     , String.class
             );
 
-//    /**
-//     * 延迟队列 EX：秒，PX：毫秒
-//     * <p>
-//     * hset key field value 先将延迟消息存储到Hash结构中，方便后面取出
-//     * </p>
-//     * <p>
-//     * set key value [expiration EX seconds|PX milliseconds] [NX|XX] 添加倒计时KEY key到期后触发过期监听器
-//     * </p>
-//     */
-//    private static final RedisScript<String> SCRIPT_DELAY_MESSAGE =
-//            new DefaultRedisScript<>(
-//                    "if redis.call('hset', KEYS[2], ARGV[3], ARGV[4]) == 1 then" +
-//                            "    return redis.call('set', KEYS[1], ARGV[1], 'NX', 'PX', ARGV[2])" +
-//                            "else" +
-//                            "    return 'fail' " +
-//                            "end", String.class
-//            );
-
     @Override
     public boolean syncSend(String topic, Object message) {
         String str = null;
@@ -75,6 +59,12 @@ public class ResMqTemplate extends MqTemplate {
                     String.valueOf(SpringUtil.getBean(ResMqProperties.class).getMaxQueueSize()), str
             );
             logger.debug("Sync Send Success: topic=[{}], message=[{}], offset=[{}]", topic.substring(Constants.TOPIC_PREFIX.length()), str, deliveryId);
+            // 计数器 todo 原子性
+            long timestamp = System.currentTimeMillis() / (24 * 60 * 60 * 1000);
+            Long size = stringRedisTemplate.opsForSet().size(Constants.GROUP_COUNT_KEY + topic.substring(Constants.TOPIC_PREFIX.length()));
+            Assert.isTrue(size != null, "Why Group Count is Zero?");
+            String key = Constants.MESSAGE_COUNT_KEY + timestamp + ":" + topic.substring(Constants.TOPIC_PREFIX.length());
+            stringRedisTemplate.opsForHash().increment(key, "total-count", size);
             return true;
         } catch (Exception e) {
             logger.error("Sync Send Error: " + topic + ", " + str, e.getMessage());

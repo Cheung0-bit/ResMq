@@ -83,6 +83,8 @@ public class ResMqPostAutoConfiguration {
             String topic = resMqListenerParam.getTopic();
             String group = resMqListenerParam.getGroup();
             buildListener(stringRedisTemplate, container, resMqListenerParam, topic, group);
+            // todo 原子性
+            stringRedisTemplate.opsForSet().add(Constants.GROUP_COUNT_KEY + topic.substring(Constants.TOPIC_PREFIX.length()), group);
         }
         return container;
     }

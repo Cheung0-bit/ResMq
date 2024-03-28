@@ -87,7 +87,7 @@ public class TestController {
             for (int j = 0; j < 5; j++) {
                 Email email = new Email("test email " + i + j, "something", "bruce");
                 try {
-                    resMqTemplate.syncDelaySend("order-service", email, 10, TimeUnit.HOURS);
+                    resMqTemplate.syncDelaySend("order-service", email, 10, TimeUnit.SECONDS);
                     resMqTemplate.syncDelaySend("video-transcode", email, 10, TimeUnit.HOURS);
                 } catch (Exception e) {
                     e.printStackTrace();

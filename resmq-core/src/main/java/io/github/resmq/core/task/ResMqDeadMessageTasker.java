@@ -1,6 +1,7 @@
 package io.github.resmq.core.task;
 
 import io.github.resmq.core.config.ResMqProperties;
+import io.github.resmq.core.constant.Constants;
 import io.github.resmq.core.util.LuaScriptUtil;
 import io.github.resmq.core.util.SpringUtil;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.core.StreamOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.util.Assert;
 
 import java.time.Duration;
 import java.util.*;
@@ -177,6 +179,10 @@ public class ResMqDeadMessageTasker {
                     );
                     // Check if it was added to the dead message queue
                     if (deadMessageFlag != null && deadMessageFlag.toString().contains(flag)) {
+                        // 计数器 todo 原子性
+                        long timestamp = System.currentTimeMillis() / (24 * 60 * 60 * 1000);
+                        String key = Constants.MESSAGE_COUNT_KEY + timestamp + ":" + topic.substring(Constants.TOPIC_PREFIX.length());
+                        stringRedisTemplate.opsForHash().increment(key, "dlq-count", 1);
                         logger.info("Dead Message ok->topic:{}, id={}", deadTopic, deadMessageFlag);
                     } else {
                         logger.error("Dead Message ok->topic:{}, id={}", deadTopic, deadMessageFlag);

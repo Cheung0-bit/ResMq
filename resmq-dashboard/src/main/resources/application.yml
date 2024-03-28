@@ -43,5 +43,5 @@ spring:
       default_encoding: utf-8
 res-mq:
   login:
-    username: xxx
-    password: xxx
+    username: admin
+    password: admin

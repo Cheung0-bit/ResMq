@@ -1,5 +1,4 @@
 $(function () {
-
     // logout
     $("#logoutBtn").click(function () {
         layer.confirm("确认注销登录?", {
@@ -9,15 +8,15 @@ $(function () {
         }, function (index) {
             layer.close(index);
             $.post(base_url + "/logout", function (data, status) {
-                if (data.code === "200") {
+                if (data.code === 200) {
                     layer.msg("注销成功");
                     setTimeout(function () {
                         window.location.href = base_url + "/";
                     }, 500);
                 } else {
                     layer.open({
-                        title: I18n.system_tips,
-                        btn: [I18n.system_ok],
+                        title: "注销失败",
+                        btn: "好的",
                         content: (data.msg || "注销失败"),
                         icon: '2'
                     });
@@ -27,7 +26,6 @@ $(function () {
 
     });
 
-
     // scrollup
     $.scrollUp({
         animation: 'fade',	// fade/slide/none
@@ -35,15 +33,15 @@ $(function () {
     });
 
 
-    // left menu status v: js + server + cookie
+    // 侧边栏
     $('.sidebar-toggle').click(function () {
-        var xxlmq_adminlte_settings = $.cookie('xxlmq_adminlte_settings');	// on=open，off=close
-        if ('off' == xxlmq_adminlte_settings) {
-            xxlmq_adminlte_settings = 'on';
+        var resmq_adminlte_settings = $.cookie('resmq_adminlte_settings');	// on=open，off=close
+        if ('off' === resmq_adminlte_settings) {
+            resmq_adminlte_settings = 'on';
         } else {
-            xxlmq_adminlte_settings = 'off';
+            resmq_adminlte_settings = 'off';
         }
-        $.cookie('xxlmq_adminlte_settings', xxlmq_adminlte_settings, {expires: 7});	//$.cookie('the_cookie', '', { expires: -1 });
+        $.cookie('resmq_adminlte_settings', resmq_adminlte_settings, {expires: 7});	//$.cookie('the_cookie', '', { expires: -1 });
     });
 
 });

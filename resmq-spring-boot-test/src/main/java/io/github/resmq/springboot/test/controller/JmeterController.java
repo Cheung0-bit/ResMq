@@ -1,5 +1,6 @@
 package io.github.resmq.springboot.test.controller;
 
+import io.github.resmq.core.annotation.ResMqListener;
 import io.github.resmq.core.template.ResMqTemplate;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,5 +30,12 @@ public class JmeterController {
         }
     }
 
+    @ResMqListener(
+            topic = "jmeter",
+            group = "default-group"
+    )
+    public void receive(String message) {
+        System.out.println("Topic: jmeter, Group: default-group, Message: " + message);
+    }
 
 }

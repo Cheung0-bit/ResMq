@@ -1,7 +1,25 @@
-/**
- * Created by xuxueli on 17/4/24.
- */
 $(function () {
+
+    // Runtime Properties
+    var dataTable = $("#runtimeProperties").dataTable({
+        "deferRender": true,
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            url: base_url + "/topic/pageList",
+            data: function (d) {
+                var obj = {};
+                obj.start = d.start;
+                obj.length = d.length;
+                obj.bizId = $('#bizId').val();
+                obj.topic = $('#topic').val();
+                return obj;
+            }
+        },
+        "searching": false,
+        "ordering": false,
+
+    })
 
     // filter Time
     var rangesConf = {};
@@ -13,32 +31,32 @@ $(function () {
     rangesConf['最近一月'] = [moment().subtract(1, 'months').startOf('day'), moment().endOf('day')];
 
     $('#filterTime').daterangepicker({
-        autoApply:false,
-        singleDatePicker:false,
-        showDropdowns:false,        // 是否显示年月选择条件
+        autoApply: false,
+        singleDatePicker: false,
+        showDropdowns: false,        // 是否显示年月选择条件
         timePicker: true, 			// 是否显示小时和分钟选择条件
         timePickerIncrement: 10, 	// 时间的增量，单位为分钟
-        timePicker24Hour : true,
-        opens : 'left', //日期选择框的弹出位置
+        timePicker24Hour: true,
+        opens: 'left', //日期选择框的弹出位置
         ranges: rangesConf,
-        locale : {
+        locale: {
             format: 'YYYY-MM-DD HH:mm:ss',
-            separator : ' - ',
-            customRangeLabel : '自定义' ,
-            applyLabel : '确定' ,
-            cancelLabel : '取消' ,
-            fromLabel : '起始时间' ,
-            toLabel : '结束时间' ,
-            daysOfWeek : '日,一,二,三,四,五,六'.split(',') ,        // '日', '一', '二', '三', '四', '五', '六'
-            monthNames : '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月'.split(',') ,        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
-            firstDay : 1
+            separator: ' - ',
+            customRangeLabel: '自定义',
+            applyLabel: '确定',
+            cancelLabel: '取消',
+            fromLabel: '起始时间',
+            toLabel: '结束时间',
+            daysOfWeek: '日,一,二,三,四,五,六'.split(','),        // '日', '一', '二', '三', '四', '五', '六'
+            monthNames: '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月'.split(','),        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
+            firstDay: 1
         },
-        startDate: rangesConf['最近一月'][0] ,
+        startDate: rangesConf['最近一月'][0],
         endDate: rangesConf['最近一月'][1]
     }, function (start, end, label) {
         freshChartDate(start, end);
     });
-    freshChartDate(rangesConf['最近一月'][0], rangesConf['最近一月'][1] );
+    freshChartDate(rangesConf['最近一月'][0], rangesConf['最近一月'][1]);
 
     /**
      * fresh Chart Date
@@ -48,22 +66,22 @@ $(function () {
      */
     function freshChartDate(startDate, endDate) {
         $.ajax({
-            type : 'POST',
-            url : base_url + '/chartInfo',
-            data : {
-                'startDate':startDate.format('YYYY-MM-DD HH:mm:ss'),
-                'endDate':endDate.format('YYYY-MM-DD HH:mm:ss')
+            type: 'POST',
+            url: base_url + '/chartInfo',
+            data: {
+                'startDate': startDate.format('YYYY-MM-DD HH:mm:ss'),
+                'endDate': endDate.format('YYYY-MM-DD HH:mm:ss')
             },
-            dataType : "json",
-            success : function(data){
-                if (data.code == 200) {
+            dataType: "json",
+            success: function (data) {
+                if (data.code === 200) {
                     lineChartInit(data)
                     pieChartInit(data);
                 } else {
                     layer.open({
-                        title: '系统提示' ,
-                        btn: [ '确定' ],
-                        content: (data.msg || '运行报表数据加载异常' ),
+                        title: '系统提示',
+                        btn: ['确定'],
+                        content: (data.msg || '运行报表数据加载异常'),
                         icon: '2'
                     });
                 }
@@ -79,7 +97,7 @@ $(function () {
             title: {
                 text: '日期分布图'
             },
-            tooltip : {
+            tooltip: {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'cross',
@@ -89,7 +107,7 @@ $(function () {
                 }
             },
             legend: {
-                data:['未消费', '消费中', '消费成功', '消费失败']
+                data: ['未消费', '消费中', '消费成功', '消费失败']
             },
             toolbox: {
                 feature: {
@@ -102,28 +120,28 @@ $(function () {
                 bottom: '3%',
                 containLabel: true
             },
-            xAxis : [
+            xAxis: [
                 {
-                    type : 'category',
-                    boundaryGap : false,
-                    data : data.data.messageDay_list
+                    type: 'category',
+                    boundaryGap: false,
+                    data: data.data.messageDay_list
                 }
             ],
-            yAxis : [
+            yAxis: [
                 {
-                    type : 'value'
+                    type: 'value'
                 }
             ],
-            series : [
+            series: [
                 {
-                    name:'未消费',
-                    type:'line',
+                    name: '未消费',
+                    type: 'line',
                     stack: 'Total',
                     areaStyle: {normal: {}},
                     data: data.data.newNum_list
                 }, {
-                    name:'消费中',
-                    type:'line',
+                    name: '消费中',
+                    type: 'line',
                     stack: 'Total',
                     label: {
                         normal: {
@@ -134,20 +152,20 @@ $(function () {
                     areaStyle: {normal: {}},
                     data: data.data.ingNum_list
                 }, {
-                    name:'消费成功',
-                    type:'line',
+                    name: '消费成功',
+                    type: 'line',
                     stack: 'Total',
                     areaStyle: {normal: {}},
                     data: data.data.successNum_list
                 }, {
-                    name:'消费失败',
-                    type:'line',
+                    name: '消费失败',
+                    type: 'line',
                     stack: 'Total',
                     areaStyle: {normal: {}},
                     data: data.data.failNum_list
                 }
             ],
-            color : [ '#BFBFBF', '#F39C12', '#00A65A', '#C23632' ]
+            color: ['#BFBFBF', '#F39C12', '#00A65A', '#C23632']
         };
 
         var lineChart = echarts.init(document.getElementById('lineChart'));
@@ -159,42 +177,42 @@ $(function () {
      */
     function pieChartInit(data) {
         var option = {
-            title : {
-                text: '成功比例图' ,
+            title: {
+                text: '成功比例图',
                 /*subtext: 'subtext',*/
-                x:'center'
+                x: 'center'
             },
-            tooltip : {
+            tooltip: {
                 trigger: 'item',
                 formatter: "{b} : {c} ({d}%)"
             },
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data:['未消费', '消费中', '消费成功', '消费失败']
+                data: ['未消费', '消费中', '消费成功', '消费失败']
             },
-            series : [
+            series: [
                 {
                     //name: '分布比例',
                     type: 'pie',
-                    radius : '55%',
+                    radius: '55%',
                     center: ['50%', '60%'],
-                    data:[
+                    data: [
                         {
-                            name:'未消费',
-                            value:data.data.newNum_total
+                            name: '未消费',
+                            value: data.data.newNum_total
                         },
                         {
-                            name:'消费中',
-                            value:data.data.ingNum_total
+                            name: '消费中',
+                            value: data.data.ingNum_total
                         },
                         {
-                            name:'消费成功',
-                            value:data.data.successNum_total
+                            name: '消费成功',
+                            value: data.data.successNum_total
                         },
                         {
-                            name:'消费失败',
-                            value:data.data.failNum_total
+                            name: '消费失败',
+                            value: data.data.failNum_total
                         }
                     ],
                     itemStyle: {
@@ -206,7 +224,7 @@ $(function () {
                     }
                 }
             ],
-            color : [ '#BFBFBF', '#F39C12', '#00A65A', '#C23632' ]
+            color: ['#BFBFBF', '#F39C12', '#00A65A', '#C23632']
         };
         var pieChart = echarts.init(document.getElementById('pieChart'));
         pieChart.setOption(option);
