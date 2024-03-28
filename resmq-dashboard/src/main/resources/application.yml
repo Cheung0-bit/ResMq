@@ -41,3 +41,7 @@ spring:
       datetime_format: yyyy-MM-dd HH:mm:ss
       template_update_delay: 30m
       default_encoding: utf-8
+res-mq:
+  login:
+    username: xxx
+    password: xxx

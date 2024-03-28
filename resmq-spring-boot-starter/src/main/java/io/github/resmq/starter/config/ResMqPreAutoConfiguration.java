@@ -19,6 +19,13 @@ public class ResMqPreAutoConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "res-mq")
     ResMqProperties resMqProperties() {
+        // add banner
+        System.out.println("\n" +
+                "   ___          __  ___    \n" +
+                "  / _ \\___ ___ /  |/  /__ _\n" +
+                " / , _/ -_|_-</ /|_/ / _ `/\n" +
+                "/_/|_|\\__/___/_/  /_/\\_, / \n" +
+                "                      /_/   Repo: https://github.com/Cheung0-bit/ResMq\n");
         return new ResMqProperties();
     }
 
