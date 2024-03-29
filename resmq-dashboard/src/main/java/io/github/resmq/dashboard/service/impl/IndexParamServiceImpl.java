@@ -3,15 +3,14 @@ package io.github.resmq.dashboard.service.impl;
 import com.alibaba.fastjson.JSON;
 import io.github.resmq.core.config.ResMqProperties;
 import io.github.resmq.core.constant.Constants;
+import io.github.resmq.dashboard.model.ReturnT;
 import io.github.resmq.dashboard.service.IndexParamService;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <>
@@ -37,13 +36,12 @@ public class IndexParamServiceImpl implements IndexParamService {
     }
 
     @Override
-    public Map<String, Integer> getCount() {
+    public Map<String, Integer> getCount(long now) {
         Map<String, Integer> map = new HashMap<>();
         Integer topicCount = Optional.ofNullable(stringRedisTemplate.keys(Constants.GROUP_COUNT_KEY + "*"))
                 .map(Set::size)
                 .orElse(0);
         map.put("topicCount", topicCount);
-        long now = System.currentTimeMillis() / (24 * 60 * 60 * 1000);
         String key = Constants.MESSAGE_COUNT_KEY + now + "*";
         Set<String> countKeys = stringRedisTemplate.keys(key);
         if (countKeys == null || countKeys.isEmpty()) {
@@ -78,5 +76,61 @@ public class IndexParamServiceImpl implements IndexParamService {
             map.put("delayCount", delayCount);
         }
         return map;
+    }
+
+    @Override
+    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
+        // process
+        List<String> messageDay_list = new ArrayList<>();
+        List<Integer> newNum_list = new ArrayList<>();
+        List<Integer> successNum_list = new ArrayList<>();
+        List<Integer> failNum_list = new ArrayList<>();
+
+        // 创建一个 SimpleDateFormat 对象，指定日期格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        // 获取 Calendar 对象，并设置为开始日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        // 循环遍历日期，并格式化为指定形式
+        while (calendar.getTime().compareTo(endDate) <= 0) {
+            Date currentDate = calendar.getTime();
+            String messageDay = dateFormat.format(currentDate);
+            messageDay_list.add(messageDay);
+            // 增加一天
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        int newNum_total = 0;
+        int successNum_total = 0;
+        int failNum_total = 0;
+
+        long start = startDate.getTime() / (24 * 60 * 60 * 1000);
+        long end = endDate.getTime() / (24 * 60 * 60 * 1000);
+
+        for (long i = start; i <= end; i++) {
+            Map<String, Integer> map = this.getCount(i);
+            int newNum = map.get("totalCount");
+            int failNum = map.get("dlqCount");
+            int successNum = newNum - failNum;
+
+            newNum_list.add(newNum);
+            successNum_list.add(successNum);
+            failNum_list.add(failNum);
+
+            newNum_total += newNum;
+            successNum_total += successNum;
+            failNum_total += failNum;
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("messageDay_list", messageDay_list);
+        result.put("newNum_list", newNum_list);
+        result.put("successNum_list", successNum_list);
+        result.put("failNum_list", failNum_list);
+
+        result.put("newNum_total", newNum_total);
+        result.put("successNum_total", successNum_total);
+        result.put("failNum_total", failNum_total);
+
+        return new ReturnT<>(result);
     }
 }

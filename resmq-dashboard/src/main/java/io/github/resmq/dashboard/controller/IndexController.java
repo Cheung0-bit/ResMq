@@ -8,12 +8,10 @@ import io.github.resmq.dashboard.service.IndexParamService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.Map;
@@ -34,17 +32,17 @@ public class IndexController {
     public String index(Model model, HttpServletRequest request) {
         ResMqProperties resMqProperties = indexParamService.getResMqProperties();
         model.addAttribute("resMqProperties", resMqProperties);
-        Map<String, Integer> map = indexParamService.getCount();
+        long now = System.currentTimeMillis() / (24 * 60 * 60 * 1000);
+        Map<String, Integer> map = indexParamService.getCount(now);
         model.addAllAttributes(map);
         return "index";
     }
 
-    @RequestMapping("/chartInfo")
+    @PostMapping("/chartInfo")
     @ResponseBody
-    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-//        ReturnT<Map<String, Object>> chartInfo = xxlMqMessageService.chartInfo(startDate, endDate);
-//        return chartInfo;
-        return null;
+    public ReturnT<Map<String, Object>> chartInfo(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                                  @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return indexParamService.chartInfo(startDate, endDate);
     }
 
     @RequestMapping("/toLogin")

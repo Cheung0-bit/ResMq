@@ -71,8 +71,8 @@
 <#macro commonHeader>
     <header class="main-header">
         <a href="${request.contextPath}/" class="logo">
-            <span class="logo-mini"><b>XXL</b></span>
-            <span class="logo-lg"><b>消息队列中心</b></span>
+            <span class="logo-mini"><b>R</b></span>
+            <span class="logo-lg"><b>ResMq监控中心</b></span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
 
@@ -111,8 +111,6 @@
                 <li class="nav-click <#if pageName == "message">active</#if>"><a
                             href="${request.contextPath}/message"><i
                                 class="fa fa-circle-o text-green"></i><span>消息记录</span></a></li>
-                <li class="nav-click <#if pageName == "biz">active</#if>"><a href="${request.contextPath}/biz"><i
-                                class="fa fa-circle-o text-red"></i><span>业务线</span></a></li>
                 <li class="nav-click <#if pageName == "help">active</#if>"><a href="${request.contextPath}/help"><i
                                 class="fa fa-circle-o text-gray"></i><span>使用教程</span></a></li>
             </ul>

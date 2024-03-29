@@ -179,6 +179,6 @@
 <script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <#-- echarts -->
 <script src="${request.contextPath}/static/plugins/echarts/echarts.common.min.js"></script>
-<#--<script src="${request.contextPath}/static/js/index.js"></script>-->
+<script src="${request.contextPath}/static/js/index.js"></script>
 </body>
 </html>

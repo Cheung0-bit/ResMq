@@ -48,8 +48,8 @@ $(function () {
             type: 'POST',
             url: base_url + '/chartInfo',
             data: {
-                'startDate': startDate.format('YYYY-MM-DD HH:mm:ss'),
-                'endDate': endDate.format('YYYY-MM-DD HH:mm:ss')
+                'startDate': startDate.format('YYYY-MM-DD'),
+                'endDate': endDate.format('YYYY-MM-DD')
             },
             dataType: "json",
             success: function (data) {
@@ -86,7 +86,7 @@ $(function () {
                 }
             },
             legend: {
-                data: ['未消费', '消费中', '消费成功', '消费失败']
+                data: ['未消费', '消费成功', '消费失败']
             },
             toolbox: {
                 feature: {
@@ -119,18 +119,6 @@ $(function () {
                     areaStyle: {normal: {}},
                     data: data.data.newNum_list
                 }, {
-                    name: '消费中',
-                    type: 'line',
-                    stack: 'Total',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'top'
-                        }
-                    },
-                    areaStyle: {normal: {}},
-                    data: data.data.ingNum_list
-                }, {
                     name: '消费成功',
                     type: 'line',
                     stack: 'Total',
@@ -144,7 +132,7 @@ $(function () {
                     data: data.data.failNum_list
                 }
             ],
-            color: ['#BFBFBF', '#F39C12', '#00A65A', '#C23632']
+            color: ['#BFBFBF', '#00A65A', '#e50e09']
         };
 
         var lineChart = echarts.init(document.getElementById('lineChart'));
@@ -168,7 +156,7 @@ $(function () {
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['未消费', '消费中', '消费成功', '消费失败']
+                data: ['未消费', '消费成功', '消费失败']
             },
             series: [
                 {
@@ -180,10 +168,6 @@ $(function () {
                         {
                             name: '未消费',
                             value: data.data.newNum_total
-                        },
-                        {
-                            name: '消费中',
-                            value: data.data.ingNum_total
                         },
                         {
                             name: '消费成功',
@@ -203,7 +187,7 @@ $(function () {
                     }
                 }
             ],
-            color: ['#BFBFBF', '#F39C12', '#00A65A', '#C23632']
+            color: ['#BFBFBF', '#00A65A', '#e50e09']
         };
         var pieChart = echarts.init(document.getElementById('pieChart'));
         pieChart.setOption(option);

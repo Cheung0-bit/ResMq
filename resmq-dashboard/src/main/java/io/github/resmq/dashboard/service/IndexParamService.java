@@ -1,7 +1,9 @@
 package io.github.resmq.dashboard.service;
 
 import io.github.resmq.core.config.ResMqProperties;
+import io.github.resmq.dashboard.model.ReturnT;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -16,6 +18,7 @@ public interface IndexParamService {
 
     ResMqProperties getResMqProperties();
 
-    Map<String, Integer> getCount();
+    Map<String, Integer> getCount(long now);
 
+    ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate);
 }
