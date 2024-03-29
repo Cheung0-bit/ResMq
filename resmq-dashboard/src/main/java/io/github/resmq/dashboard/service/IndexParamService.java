@@ -2,6 +2,8 @@ package io.github.resmq.dashboard.service;
 
 import io.github.resmq.core.config.ResMqProperties;
 
+import java.util.Map;
+
 /**
  * <主页表格系统参数服务>
  *
@@ -13,5 +15,7 @@ public interface IndexParamService {
     void getClusterNodes();
 
     ResMqProperties getResMqProperties();
+
+    Map<String, Integer> getCount();
 
 }

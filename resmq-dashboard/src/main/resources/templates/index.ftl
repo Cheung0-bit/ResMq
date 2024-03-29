@@ -32,7 +32,7 @@
                         <span class="info-box-icon"><i class="fa fa-folder"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">主题数量</span>
-                            <span class="info-box-number">4</span>
+                            <span class="info-box-number">${topicCount}</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
@@ -45,7 +45,7 @@
                         <span class="info-box-icon"><i class="fa fa-inbox"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">消息总量</span>
-                            <span class="info-box-number">4</span>
+                            <span class="info-box-number">${totalCount}</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
@@ -58,7 +58,7 @@
                         <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">延迟消息</span>
-                            <span class="info-box-number">4</span>
+                            <span class="info-box-number">${delayCount}</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
@@ -71,7 +71,7 @@
                         <span class="info-box-icon"><i class="fa fa-exclamation-circle"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">死信总量</span>
-                            <span class="info-box-number">4</span>
+                            <span class="info-box-number">${dlqCount}</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>

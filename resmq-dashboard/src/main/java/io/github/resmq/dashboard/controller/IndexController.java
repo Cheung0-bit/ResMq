@@ -34,6 +34,8 @@ public class IndexController {
     public String index(Model model, HttpServletRequest request) {
         ResMqProperties resMqProperties = indexParamService.getResMqProperties();
         model.addAttribute("resMqProperties", resMqProperties);
+        Map<String, Integer> map = indexParamService.getCount();
+        model.addAllAttributes(map);
         return "index";
     }
 

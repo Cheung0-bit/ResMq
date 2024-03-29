@@ -12,9 +12,7 @@ import org.springframework.data.redis.connection.Limit;
 import org.springframework.data.redis.connection.stream.MapRecord;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootTest
 @Slf4j
@@ -25,6 +23,45 @@ class ResmqDashboardApplicationTests {
 
     @Resource
     TopicsService topicsService;
+
+    @Test
+    void count() {
+        Map<String, Integer> map = new HashMap<>();
+        Integer topicCount = Optional.ofNullable(stringRedisTemplate.keys(Constants.GROUP_COUNT_KEY + "*"))
+                .map(Set::size)
+                .orElse(0);
+        map.put("topicCount", topicCount);
+        long now = System.currentTimeMillis() / (24 * 60 * 60 * 1000) - 1;
+        String key = Constants.MESSAGE_COUNT_KEY + now + "*";
+        Set<String> keys = stringRedisTemplate.keys(key);
+        if (keys == null || keys.isEmpty()) {
+            map.put("totalCount", 0);
+            map.put("ackCount", 0);
+            map.put("dlqCount", 0);
+        } else {
+            int totalCount = 0, ackCount = 0, dlqCount = 0;
+            for (String s : keys) {
+                Integer totalCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(s, "total-count"))
+                        .map(value -> Integer.parseInt(value.toString()))
+                        .orElse(0);
+                totalCount += totalCountValue;
+
+                Integer ackCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(s, "ack-count"))
+                        .map(value -> Integer.parseInt(value.toString()))
+                        .orElse(0);
+                ackCount += ackCountValue;
+
+                Integer dlqCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(s, "dlq-count"))
+                        .map(value -> Integer.parseInt(value.toString()))
+                        .orElse(0);
+                dlqCount += dlqCountValue;
+            }
+            map.put("totalCount", totalCount);
+            map.put("ackCount", ackCount);
+            map.put("dlqCount", dlqCount);
+        }
+        System.out.println(1);
+    }
 
     @Test
     void contextLoads() {
