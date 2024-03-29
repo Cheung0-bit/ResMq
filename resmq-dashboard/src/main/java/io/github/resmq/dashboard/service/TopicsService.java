@@ -4,6 +4,7 @@ import io.github.resmq.dashboard.entity.GroupInfo;
 import io.github.resmq.dashboard.entity.TopicInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <主题服务类>
@@ -15,7 +16,7 @@ public interface TopicsService {
 
     TopicInfo getTopicInfo(String topic);
 
-    List<TopicInfo> getAllTopicsInfo(int start,int length,String topic);
+    Map<String, Object> getAllTopicsInfo(int start, int length, String topic);
 
     List<GroupInfo> getTopicDetail(String topic);
 }

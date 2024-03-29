@@ -2,7 +2,7 @@
 <html>
 <head>
     <#import "../common/common.macro.ftl" as netCommon>
-    <title>消息主题</title>
+    <title>死信队列</title>
     <@netCommon.commonStyle />
     <!-- DataTables -->
     <link rel="stylesheet"
@@ -13,13 +13,13 @@
     <!-- header -->
     <@netCommon.commonHeader />
     <!-- left -->
-    <@netCommon.commonLeft "topic" />
+    <@netCommon.commonLeft "deadMessage" />
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>消息主题管理<small></small></h1>
+            <h1>死信管理<small></small></h1>
         </section>
 
         <!-- Main content -->
@@ -73,7 +73,7 @@
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="${request.contextPath}/static/plugins/jquery/jquery.validate.min.js"></script>
 
-<script src="${request.contextPath}/static/js/topic.index.1.js"></script>
+<script src="${request.contextPath}/static/js/deadMessage.index.1.js"></script>
 
 </body>
 </html>

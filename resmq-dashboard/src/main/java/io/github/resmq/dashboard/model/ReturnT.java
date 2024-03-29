@@ -36,6 +36,10 @@ public class ReturnT<T> implements Serializable {
         this.data = data;
     }
 
+    public static <T> ReturnT<T> success(T data) {
+        return new ReturnT<T>(data);
+    }
+
     public int getCode() {
         return code;
     }

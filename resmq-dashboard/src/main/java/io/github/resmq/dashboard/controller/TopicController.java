@@ -1,6 +1,5 @@
 package io.github.resmq.dashboard.controller;
 
-import io.github.resmq.dashboard.entity.TopicInfo;
 import io.github.resmq.dashboard.service.TopicsService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <>
@@ -25,16 +24,16 @@ public class TopicController {
     private TopicsService topicsService;
 
     @RequestMapping("")
-    public String index(Model model){
+    public String index(Model model) {
 
         return "topic/topic.index";
     }
 
     @RequestMapping("/pageList")
     @ResponseBody
-    public List<TopicInfo> pageList(@RequestParam(required = false, defaultValue = "0") int start,
-                                    @RequestParam(required = false, defaultValue = "10") int length,
-                                    String topic){
+    public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
+                                        @RequestParam(required = false, defaultValue = "10") int length,
+                                        @RequestParam("topic") String topic) {
         return topicsService.getAllTopicsInfo(start, length, topic);
     }
 

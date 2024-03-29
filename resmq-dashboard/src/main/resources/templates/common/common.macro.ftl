@@ -111,6 +111,12 @@
                 <li class="nav-click <#if pageName == "message">active</#if>"><a
                             href="${request.contextPath}/message"><i
                                 class="fa fa-circle-o text-green"></i><span>消息记录</span></a></li>
+                <li class="nav-click <#if pageName == "delayMessage">active</#if>"><a
+                            href="${request.contextPath}/delayMessage"><i
+                                class="fa fa-circle-o text-purple"></i><span>延迟队列</span></a></li>
+                <li class="nav-click <#if pageName == "deadMessage">active</#if>"><a
+                            href="${request.contextPath}/deadMessage"><i
+                                class="fa fa-circle-o text-red"></i><span>死信队列</span></a></li>
                 <li class="nav-click <#if pageName == "help">active</#if>"><a href="${request.contextPath}/help"><i
                                 class="fa fa-circle-o text-gray"></i><span>使用教程</span></a></li>
             </ul>

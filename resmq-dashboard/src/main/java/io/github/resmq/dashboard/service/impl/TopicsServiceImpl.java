@@ -13,10 +13,7 @@ import org.springframework.data.redis.connection.stream.StreamInfo;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -41,7 +38,7 @@ public class TopicsServiceImpl implements TopicsService {
     }
 
     @Override
-    public List<TopicInfo> getAllTopicsInfo(int start, int length, String topic) {
+    public Map<String, Object> getAllTopicsInfo(int start, int length, String topic) {
         // 获取topics的key
         Set<String> keys = stringRedisTemplate.keys(Constants.TOPIC_PREFIX + "*");
         List<TopicInfo> topicInfos = new ArrayList<>();
@@ -56,7 +53,12 @@ public class TopicsServiceImpl implements TopicsService {
         } else {
             log.info("topics为空");
         }
-        return PaginationUtils.paginate(topicInfos, start, length);
+        List<TopicInfo> paginated = PaginationUtils.paginate(topicInfos, start, length);
+        Map<String, Object> map = new HashMap<>();
+        map.put("recordsTotal", topicInfos.size());		// 总记录数
+        map.put("recordsFiltered", paginated.size());	// 过滤后的总记录数
+        map.put("data", paginated);  					// 分页列表
+        return map;
     }
 
     @Override
