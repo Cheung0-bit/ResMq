@@ -15,7 +15,7 @@ public interface TopicsService {
 
     TopicInfo getTopicInfo(String topic);
 
-    List<TopicInfo> getAllTopicsInfo();
+    List<TopicInfo> getAllTopicsInfo(int start,int length,String topic);
 
     List<GroupInfo> getTopicDetail(String topic);
 }

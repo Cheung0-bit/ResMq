@@ -2,7 +2,7 @@
 <html>
 <head>
     <#import "./common/common.macro.ftl" as netCommon>
-    <title>消息队列中心</title>
+    <title>运行报表</title>
     <@netCommon.commonStyle />
     <!-- daterangepicker -->
     <link rel="stylesheet"

@@ -6,6 +6,7 @@ import io.github.resmq.core.util.LuaScriptUtil;
 import io.github.resmq.dashboard.entity.GroupInfo;
 import io.github.resmq.dashboard.entity.TopicInfo;
 import io.github.resmq.dashboard.service.TopicsService;
+import io.github.resmq.dashboard.util.PaginationUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.stream.StreamInfo;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * <>
@@ -39,20 +41,22 @@ public class TopicsServiceImpl implements TopicsService {
     }
 
     @Override
-    public List<TopicInfo> getAllTopicsInfo() {
+    public List<TopicInfo> getAllTopicsInfo(int start, int length, String topic) {
         // 获取topics的key
         Set<String> keys = stringRedisTemplate.keys(Constants.TOPIC_PREFIX + "*");
         List<TopicInfo> topicInfos = new ArrayList<>();
+        Pattern pattern = Pattern.compile(topic);
         if (keys != null) {
             for (String key : keys) {
-                if (!key.contains("DLQ")) {
+                if (!key.contains("DLQ") &&
+                        pattern.matcher(key.substring(Constants.TOPIC_PREFIX.length())).find()) {
                     topicInfos.add(this.getTopicInfo(key));
                 }
             }
         } else {
             log.info("topics为空");
         }
-        return topicInfos;
+        return PaginationUtils.paginate(topicInfos, start, length);
     }
 
     @Override
