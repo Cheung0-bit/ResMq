@@ -1,26 +1,5 @@
 $(function () {
 
-    // Runtime Properties
-    var dataTable = $("#runtimeProperties").dataTable({
-        "deferRender": true,
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-            url: base_url + "/topic/pageList",
-            data: function (d) {
-                var obj = {};
-                obj.start = d.start;
-                obj.length = d.length;
-                obj.bizId = $('#bizId').val();
-                obj.topic = $('#topic').val();
-                return obj;
-            }
-        },
-        "searching": false,
-        "ordering": false,
-
-    })
-
     // filter Time
     var rangesConf = {};
     rangesConf['今日'] = [moment().startOf('day'), moment().endOf('day')];

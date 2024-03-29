@@ -121,7 +121,7 @@
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <table id="runtimeProperties" class="table table-striped">
+                                <table class="table table-striped">
                                     <thead>
                                     <tr>
                                         <th>参数名</th>
@@ -130,12 +130,36 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>Data 1</td>
-                                        <td>Data 2</td>
+                                        <td>enable</td>
+                                        <td>${resMqProperties.enable?string("true","false")}</td>
                                     </tr>
                                     <tr>
-                                        <td>Data 3</td>
-                                        <td>Data 4</td>
+                                        <td>maxQueueSize</td>
+                                        <td>${resMqProperties.maxQueueSize}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>deadMessageDeliveryCount</td>
+                                        <td>${resMqProperties.deadMessageDeliveryCount}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>deadMessageDeliverySecond</td>
+                                        <td>${resMqProperties.deadMessageDeliverySecond}(s)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>deadMessageScheduledThreadPoolCoreSize</td>
+                                        <td>${resMqProperties.deadMessageScheduledThreadPoolCoreSize}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>deadMessageTimerInitialDelay</td>
+                                        <td>${resMqProperties.deadMessageTimerInitialDelay}(s)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>deadMessageTimerDelay</td>
+                                        <td>${resMqProperties.deadMessageTimerDelay}(s)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>pendingMessagesPullCount</td>
+                                        <td>${resMqProperties.pendingMessagesPullCount}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -155,6 +179,6 @@
 <script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <#-- echarts -->
 <script src="${request.contextPath}/static/plugins/echarts/echarts.common.min.js"></script>
-<script src="${request.contextPath}/static/js/index.js"></script>
+<#--<script src="${request.contextPath}/static/js/index.js"></script>-->
 </body>
 </html>

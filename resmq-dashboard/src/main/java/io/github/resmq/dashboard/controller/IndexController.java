@@ -1,8 +1,11 @@
 package io.github.resmq.dashboard.controller;
 
+import io.github.resmq.core.config.ResMqProperties;
 import io.github.resmq.dashboard.annotation.PermissionLimit;
 import io.github.resmq.dashboard.intercepter.PermissionInterceptor;
 import io.github.resmq.dashboard.model.ReturnT;
+import io.github.resmq.dashboard.service.IndexParamService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -24,12 +27,13 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
+    @Resource
+    private IndexParamService indexParamService;
+
     @RequestMapping("/")
     public String index(Model model, HttpServletRequest request) {
-
-//        Map<String, Object> dashboardMap = xxlMqMessageService.dashboardInfo();
-//        model.addAllAttributes(dashboardMap);
-
+        ResMqProperties resMqProperties = indexParamService.getResMqProperties();
+        model.addAttribute("resMqProperties", resMqProperties);
         return "index";
     }
 
