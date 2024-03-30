@@ -55,9 +55,9 @@ public class TopicsServiceImpl implements TopicsService {
         }
         List<TopicInfo> paginated = PaginationUtils.paginate(topicInfos, start, length);
         Map<String, Object> map = new HashMap<>();
-        map.put("recordsTotal", topicInfos.size());		// 总记录数
-        map.put("recordsFiltered", paginated.size());	// 过滤后的总记录数
-        map.put("data", paginated);  					// 分页列表
+        map.put("recordsTotal", topicInfos.size());             // 总记录数
+        map.put("recordsFiltered", paginated.size());           // 过滤后的总记录数
+        map.put("data", paginated);                             // 分页列表
         return map;
     }
 
@@ -72,5 +72,41 @@ public class TopicsServiceImpl implements TopicsService {
             }
         }
         return groupInfos;
+    }
+
+    @Override
+    public String topicDetailHtml(String topic) {
+        List<GroupInfo> groupInfos = getTopicDetail(topic);
+        StringBuilder html = new StringBuilder("<style>");
+        html.append("table.hacker-table {");
+        html.append("  border-collapse: collapse;");
+        html.append("  width: 100%;");
+        html.append("}");
+        html.append("table.hacker-table th, table.hacker-table td {");
+        html.append("  padding: 8px;");
+        html.append("  text-align: left;");
+        html.append("  border-bottom: 1px solid #ddd;");
+        html.append("}");
+        html.append("table.hacker-table th {");
+        html.append("  background-color: green;");
+        html.append("}");
+        html.append("</style>");
+        html.append("<table class=\"hacker-table\">");
+        html.append("<tr>");
+        html.append("<th>Name</th>");
+        html.append("<th>Consumers</th>");
+        html.append("<th>Pending</th>");
+        html.append("<th>Last Delivered ID</th>");
+        html.append("</tr>");
+        for (GroupInfo groupInfo : groupInfos) {
+            html.append("<tr>");
+            html.append("<td>").append(groupInfo.getName()).append("</td>");
+            html.append("<td>").append(groupInfo.getConsumers()).append("</td>");
+            html.append("<td>").append(groupInfo.getPending()).append("</td>");
+            html.append("<td>").append(groupInfo.getLastDeliveredId()).append("</td>");
+            html.append("</tr>");
+        }
+        html.append("</table>");
+        return html.toString();
     }
 }

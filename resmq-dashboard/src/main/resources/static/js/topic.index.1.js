@@ -1,7 +1,5 @@
 $(function () {
 
-    const tableData = {};
-
     const dataTable = $("#data_list").dataTable({
         "deferRender": true,
         "processing": true,
@@ -13,7 +11,6 @@ $(function () {
                 obj.start = d.start + 1;
                 obj.length = d.length;
                 obj.topic = $("#topic").val();
-                console.log(obj)
                 return obj;
             }
         },
@@ -25,7 +22,14 @@ $(function () {
             {data: 'radixTreeKeys'},
             {data: 'radixTreeNodes'},
             {data: 'groups'},
-            {data: 'lastGeneratedId'}
+            {data: 'lastGeneratedId'},
+            {
+                data: 'groupInfos',
+                ordering: true,
+                render: function (data, type, row) {
+                    return '<a href="javascript:;" class="showGroupInfos" _topicName="' + row.name + '">查看</a>';
+                }
+            },
         ],
         "language": {
             "sProcessing": "处理中...",
@@ -58,5 +62,55 @@ $(function () {
         dataTable.fnDraw();
     });
 
+    // msg 弹框
+    $("#data_list").on('click', '.showGroupInfos', function () {
+        const _topicName = $(this).attr('_topicName');
+        $.ajax({
+            type: 'POST',
+            url: base_url + '/topic/groupInfos',
+            data: {"topic": _topicName},
+            dataType: "json",
+            success: function (data) {
+                ComAlertTec.show(data.data);
+            }
+        });
+    });
+
 
 });
+
+// Com Alert by Tec theme
+var ComAlertTec = {
+    html: function () {
+        var html =
+            '<div class="modal fade" id="ComAlertTec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<div class="modal-dialog">' +
+            '<div class="modal-content-tec">' +
+            '<div class="modal-body"><div class="alert" style="color:#fff;"></div></div>' +
+            '<div class="modal-footer">' +
+            '<div class="text-center" >' +
+            '<button type="button" class="btn btn-info ok" data-dismiss="modal" >确认</button>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        return html;
+    },
+    show: function (msg, callback) {
+        // dom init
+        if ($('#ComAlertTec').length == 0) {
+            $('body').append(ComAlertTec.html());
+        }
+
+        // init com alert
+        $('#ComAlertTec .alert').html(msg);
+        $('#ComAlertTec').modal('show');
+        $('#ComAlertTec .ok').click(function () {
+            $('#ComAlertTec').modal('hide');
+            if (typeof callback == 'function') {
+                callback();
+            }
+        });
+    }
+};

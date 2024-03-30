@@ -51,6 +51,7 @@
                                     <th>Radix树节点数</th>
                                     <th>广播组数</th>
                                     <th>最后偏移</th>
+                                    <th>详情</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>

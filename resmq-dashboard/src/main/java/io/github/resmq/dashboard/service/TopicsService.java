@@ -19,4 +19,6 @@ public interface TopicsService {
     Map<String, Object> getAllTopicsInfo(int start, int length, String topic);
 
     List<GroupInfo> getTopicDetail(String topic);
+
+    String topicDetailHtml(String topic);
 }
