@@ -28,6 +28,19 @@
             <div class="row">
                 <div class="col-xs-4">
                     <div class="input-group">
+                        <span class="input-group-addon">主题</span>
+                        <select class="form-control" id="topicName">
+                            <option value="-1">全部</option>
+                            <option value="0">无</option>
+                            <#list topicList as topicInfo>
+                                <option value="${topicInfo.name}">${topicInfo.name}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-4">
+                    <div class="input-group">
                         <span class="input-group-addon">消息主题</span>
                         <input type="text" class="form-control" id="topic" autocomplete="on"
                                placeholder="请输入消息主题，支持正则匹配">
@@ -72,7 +85,6 @@
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="${request.contextPath}/static/plugins/jquery/jquery.validate.min.js"></script>
-
 <#--<script src="${request.contextPath}/static/js/message.index.1.js"></script>-->
 
 </body>
