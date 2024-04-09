@@ -56,7 +56,7 @@ public class TopicsServiceImpl implements TopicsService {
         List<TopicInfo> paginated = PaginationUtils.paginate(topicInfos, start, length);
         Map<String, Object> map = new HashMap<>();
         map.put("recordsTotal", topicInfos.size());             // 总记录数
-        map.put("recordsFiltered", paginated.size());           // 过滤后的总记录数
+        map.put("recordsFiltered", topicInfos.size());           // 过滤后的总记录数
         map.put("data", paginated);                             // 分页列表
         return map;
     }

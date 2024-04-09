@@ -4,7 +4,9 @@ import io.github.resmq.core.constant.Constants;
 import io.github.resmq.dashboard.entity.CommonGroupMessage;
 import io.github.resmq.dashboard.entity.CommonMessage;
 import io.github.resmq.dashboard.entity.CommonMessageSummary;
+import io.github.resmq.dashboard.entity.DeadMessage;
 import io.github.resmq.dashboard.service.DeadMessageService;
+import io.github.resmq.dashboard.util.PaginationUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Range;
@@ -28,46 +30,39 @@ public class DeadMessageImpl implements DeadMessageService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public List<CommonMessageSummary> getDMSummary() {
-        // 获取topics的key
-        Set<String> keys = stringRedisTemplate.keys(Constants.TOPIC_PREFIX + "*");
-        List<CommonMessageSummary> commonMessageSummaryList = null;
-        if (keys != null) {
-            Map<String, CommonMessageSummary> map = new HashMap<>();
-            for (String key : keys) {
-                if (key.contains("DLQ")) {
-                    String[] res = key.substring(Constants.TOPIC_PREFIX.length()).split(":");
-                    String originTopic = res[0];
-                    if (!map.containsKey(originTopic)) {
-                        CommonMessageSummary commonMessageSummary = new CommonMessageSummary();
-                        commonMessageSummary.setOriginTopic(originTopic);
-                        List<CommonGroupMessage> commonGroupMessages = new ArrayList<>();
-                        convertToDeadGroupMessage(key, res, commonGroupMessages);
-                        commonMessageSummary.setCommonGroupMessages(commonGroupMessages);
-                        map.put(originTopic, commonMessageSummary);
-                    } else {
-                        List<CommonGroupMessage> commonGroupMessages = map.get(originTopic).getCommonGroupMessages();
-                        convertToDeadGroupMessage(key, res, commonGroupMessages);
-                    }
+    public Map<String, Object> getDeadMessages(int start, int length, String topic) {
+        Set<String> keys = new HashSet<>();
+        if (!topic.equals("0")) {
+            keys = stringRedisTemplate.keys(Constants.TOPIC_PREFIX + "*");
+            if (keys != null) {
+                keys.removeIf(key -> !key.contains("DLQ"));
+                if (!topic.equals("-1")) {
+                    keys.removeIf(key -> !key.contains(topic));
                 }
             }
-            commonMessageSummaryList = new ArrayList<>(map.values());
+        }
+        List<DeadMessage> deadMessages = new ArrayList<>();
+        if (keys != null) {
+            for (String key : keys) {
+                String[] split = key.substring(Constants.TOPIC_PREFIX.length()).split(":");
+                String originTopic = split[0];
+                String groupName = split[1];
+                List<MapRecord<String, Object, Object>> messages = stringRedisTemplate.opsForStream().range(key, Range.rightOpen("0-0", "+"));
+                if (messages != null) {
+                    deadMessages.addAll(messages.stream().map(
+                            e -> new DeadMessage(e.getId().toString(), e.getValue().get("message").toString(), originTopic, groupName)
+                    ).toList());
+                }
+            }
         } else {
             log.info("topics为空");
         }
-        return commonMessageSummaryList;
+        List<DeadMessage> paginated = PaginationUtils.paginate(deadMessages, start, length);
+        Map<String, Object> map = new HashMap<>();
+        map.put("recordsTotal", deadMessages.size());             // 总记录数
+        map.put("recordsFiltered", deadMessages.size());           // 过滤后的总记录数
+        map.put("data", paginated);                             // 分页列表
+        return map;
     }
 
-    private void convertToDeadGroupMessage(String key, String[] res, List<CommonGroupMessage> commonGroupMessages) {
-        CommonGroupMessage commonGroupMessage = new CommonGroupMessage();
-        commonGroupMessage.setGroupName(res[2]);
-        List<MapRecord<String, Object, Object>> messages = stringRedisTemplate.opsForStream().range(key, Range.rightOpen("0-0", "+"));
-        if (messages != null) {
-            List<CommonMessage> commonMessages = messages.stream().map(
-                    e -> new CommonMessage(e.getId().toString(), e.getValue().get("message").toString())
-            ).toList();
-            commonGroupMessage.setCommonMessages(commonMessages);
-        }
-        commonGroupMessages.add(commonGroupMessage);
-    }
 }

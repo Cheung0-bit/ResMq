@@ -1,6 +1,6 @@
 package io.github.resmq.dashboard.controller;
 
-import io.github.resmq.dashboard.service.CommonMessageService;
+import io.github.resmq.dashboard.service.DeadMessageService;
 import io.github.resmq.dashboard.service.TopicsService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
@@ -15,23 +15,23 @@ import java.util.Map;
  * <>
  *
  * @Author zhanglin
- * @createTime 2024/3/30 10:51
+ * @createTime 2024/4/9 12:16
  */
 @Controller
-@RequestMapping("/message")
-public class MessageController {
+@RequestMapping("/deadMessage")
+public class DeadMessageController {
 
     @Resource
     private TopicsService topicsService;
 
     @Resource
-    private CommonMessageService commonMessageService;
+    private DeadMessageService deadMessageService;
 
     @RequestMapping("")
     public String index(Model model) {
         Map<String, Object> allTopicsInfo = topicsService.getAllTopicsInfo(1, Integer.MAX_VALUE, "");
         model.addAttribute("topicList", allTopicsInfo.get("data"));
-        return "message/message.index";
+        return "deadMessage/deadMessage.index";
     }
 
     @RequestMapping("/pageList")
@@ -39,7 +39,7 @@ public class MessageController {
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         @RequestParam("topic") String topic) {
-        return commonMessageService.getCommonMessages(start, length, topic);
+        return deadMessageService.getDeadMessages(start, length, topic);
     }
 
 }

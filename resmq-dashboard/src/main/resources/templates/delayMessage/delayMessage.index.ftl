@@ -28,8 +28,8 @@
             <div class="row">
                 <div class="col-xs-4">
                     <div class="input-group">
-                        <span class="input-group-addon">消息主题</span>
-                        <input type="text" class="form-control" id="topic" autocomplete="on"
+                        <span class="input-group-addon">延迟队列名称</span>
+                        <input type="text" class="form-control" id="scheduledName" autocomplete="on"
                                placeholder="请输入消息主题，支持正则匹配">
                     </div>
                 </div>
@@ -45,12 +45,10 @@
                             <table id="data_list" class="table table-bordered table-striped" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>主题名</th>
-                                    <th>Stream长度</th>
-                                    <th>Radix树长度</th>
-                                    <th>Radix树节点数</th>
-                                    <th>广播组数</th>
-                                    <th>最后偏移</th>
+                                    <th>延迟队列名称</th>
+                                    <th>消息内容</th>
+                                    <th>待投递时间</th>
+                                    <th>是否过期</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>

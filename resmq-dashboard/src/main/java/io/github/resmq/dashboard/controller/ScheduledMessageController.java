@@ -1,7 +1,6 @@
 package io.github.resmq.dashboard.controller;
 
-import io.github.resmq.dashboard.service.CommonMessageService;
-import io.github.resmq.dashboard.service.TopicsService;
+import io.github.resmq.dashboard.service.ScheduledService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,31 +14,27 @@ import java.util.Map;
  * <>
  *
  * @Author zhanglin
- * @createTime 2024/3/30 10:51
+ * @createTime 2024/4/8 13:49
  */
 @Controller
-@RequestMapping("/message")
-public class MessageController {
+@RequestMapping("/delayMessage")
+public class ScheduledMessageController {
 
     @Resource
-    private TopicsService topicsService;
-
-    @Resource
-    private CommonMessageService commonMessageService;
+    private ScheduledService scheduledService;
 
     @RequestMapping("")
     public String index(Model model) {
-        Map<String, Object> allTopicsInfo = topicsService.getAllTopicsInfo(1, Integer.MAX_VALUE, "");
-        model.addAttribute("topicList", allTopicsInfo.get("data"));
-        return "message/message.index";
+
+        return "delayMessage/delayMessage.index";
     }
 
     @RequestMapping("/pageList")
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        @RequestParam("topic") String topic) {
-        return commonMessageService.getCommonMessages(start, length, topic);
+                                        @RequestParam("scheduledName") String scheduledName) {
+        return scheduledService.returnScheduledTasks(start, length, scheduledName);
     }
 
 }

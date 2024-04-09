@@ -39,13 +39,6 @@
                     </div>
                 </div>
 
-                <div class="col-xs-4">
-                    <div class="input-group">
-                        <span class="input-group-addon">消息主题</span>
-                        <input type="text" class="form-control" id="topic" autocomplete="on"
-                               placeholder="请输入消息主题，支持正则匹配">
-                    </div>
-                </div>
                 <div class="col-xs-2 col-xs-offset-6">
                     <button class="btn btn-block btn-info" id="searchBtn">搜索</button>
                 </div>
@@ -58,12 +51,8 @@
                             <table id="data_list" class="table table-bordered table-striped" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>主题名</th>
-                                    <th>Stream长度</th>
-                                    <th>Radix树长度</th>
-                                    <th>Radix树节点数</th>
-                                    <th>广播组数</th>
-                                    <th>最后偏移</th>
+                                    <th>消息ID</th>
+                                    <th>消息内容</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -85,7 +74,7 @@
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="${request.contextPath}/static/plugins/jquery/jquery.validate.min.js"></script>
-<#--<script src="${request.contextPath}/static/js/message.index.1.js"></script>-->
+<script src="${request.contextPath}/static/js/message.index.1.js"></script>
 
 </body>
 </html>

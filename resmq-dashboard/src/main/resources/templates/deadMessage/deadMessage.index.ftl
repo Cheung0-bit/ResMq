@@ -8,7 +8,7 @@
     <link rel="stylesheet"
           href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 </head>
-<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?? && cookieMap["resmq_adminlte_settings"]?exists && "off" == cookieMap["resmq_adminlte_settings"].value >sidebar-collapse</#if>">
+<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?? && cookieMap["resmq_adminlte_settings"]?? && "off" == cookieMap["resmq_adminlte_settings"].value >sidebar-collapse</#if>">
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -28,9 +28,14 @@
             <div class="row">
                 <div class="col-xs-4">
                     <div class="input-group">
-                        <span class="input-group-addon">消息主题</span>
-                        <input type="text" class="form-control" id="topic" autocomplete="on"
-                               placeholder="请输入消息主题，支持正则匹配">
+                        <span class="input-group-addon">主题</span>
+                        <select class="form-control" id="topicName">
+                            <option value="-1">全部</option>
+                            <option value="0">无</option>
+                            <#list topicList as topicInfo>
+                                <option value="${topicInfo.name}">${topicInfo.name}</option>
+                            </#list>
+                        </select>
                     </div>
                 </div>
                 <div class="col-xs-2 col-xs-offset-6">
@@ -45,12 +50,10 @@
                             <table id="data_list" class="table table-bordered table-striped" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>主题名</th>
-                                    <th>Stream长度</th>
-                                    <th>Radix树长度</th>
-                                    <th>Radix树节点数</th>
-                                    <th>广播组数</th>
-                                    <th>最后偏移</th>
+                                    <th>从属主题</th>
+                                    <th>消费分组</th>
+                                    <th>消息ID</th>
+                                    <th>消息内容</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>

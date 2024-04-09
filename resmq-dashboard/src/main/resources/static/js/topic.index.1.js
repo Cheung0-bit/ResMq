@@ -8,7 +8,7 @@ $(function () {
             url: base_url + "/topic/pageList",
             data: function (d) {
                 const obj = {};
-                obj.start = d.start + 1;
+                obj.start = d.start / 10 + 1;
                 obj.length = d.length;
                 obj.topic = $("#topic").val();
                 return obj;

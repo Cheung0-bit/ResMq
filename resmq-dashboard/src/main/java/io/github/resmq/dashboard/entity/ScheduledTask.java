@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @Data
 public class ScheduledTask {
 
+    private String scheduledName;
+
     private String message;
 
     private LocalDateTime deadline;

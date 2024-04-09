@@ -1,8 +1,6 @@
 package io.github.resmq.dashboard.service;
 
-import io.github.resmq.dashboard.entity.CommonMessageSummary;
-
-import java.util.List;
+import java.util.Map;
 
 /**
  * <>
@@ -12,6 +10,6 @@ import java.util.List;
  */
 public interface DeadMessageService {
 
-    List<CommonMessageSummary> getDMSummary();
+    Map<String, Object> getDeadMessages(int start, int length, String topic);
 
 }
