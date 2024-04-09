@@ -1,9 +1,6 @@
 package io.github.resmq.dashboard.service.impl;
 
 import io.github.resmq.core.constant.Constants;
-import io.github.resmq.dashboard.entity.CommonGroupMessage;
-import io.github.resmq.dashboard.entity.CommonMessage;
-import io.github.resmq.dashboard.entity.CommonMessageSummary;
 import io.github.resmq.dashboard.entity.DeadMessage;
 import io.github.resmq.dashboard.service.DeadMessageService;
 import io.github.resmq.dashboard.util.PaginationUtils;
@@ -46,7 +43,7 @@ public class DeadMessageImpl implements DeadMessageService {
             for (String key : keys) {
                 String[] split = key.substring(Constants.TOPIC_PREFIX.length()).split(":");
                 String originTopic = split[0];
-                String groupName = split[1];
+                String groupName = split[2];
                 List<MapRecord<String, Object, Object>> messages = stringRedisTemplate.opsForStream().range(key, Range.rightOpen("0-0", "+"));
                 if (messages != null) {
                     deadMessages.addAll(messages.stream().map(

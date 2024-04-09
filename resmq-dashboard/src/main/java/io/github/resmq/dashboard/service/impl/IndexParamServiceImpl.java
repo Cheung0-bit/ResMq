@@ -48,7 +48,7 @@ public class IndexParamServiceImpl implements IndexParamService {
             map.put("totalCount", 0);
             map.put("dlqCount", 0);
         } else {
-            int totalCount = 0, ackCount = 0, dlqCount = 0;
+            int totalCount = 0, dlqCount = 0;
             for (String countKey : countKeys) {
                 Integer totalCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(countKey, "total-count"))
                         .map(value -> Integer.parseInt(value.toString()))
@@ -103,8 +103,8 @@ public class IndexParamServiceImpl implements IndexParamService {
         int successNum_total = 0;
         int failNum_total = 0;
 
-        long start = startDate.getTime() / (24 * 60 * 60 * 1000);
-        long end = endDate.getTime() / (24 * 60 * 60 * 1000);
+        long start = startDate.getTime() / (24 * 60 * 60 * 1000) + 1;
+        long end = endDate.getTime() / (24 * 60 * 60 * 1000) + 1;
 
         for (long i = start; i <= end; i++) {
             Map<String, Integer> map = this.getCount(i);
