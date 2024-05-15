@@ -32,7 +32,7 @@ res-mq:
     video-transcode:
       topic: video-transcode
       group: my-group
-  max-queue-size: 1000
+  max-queue-size: 10000
   dead-message-delivery-count: 1
   dead-message-delivery-second: 1
   dead-message-scheduled-thread-pool-core-size: 2
