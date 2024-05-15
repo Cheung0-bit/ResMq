@@ -47,13 +47,19 @@ public class IndexParamServiceImpl implements IndexParamService {
         if (countKeys == null || countKeys.isEmpty()) {
             map.put("totalCount", 0);
             map.put("dlqCount", 0);
+            map.put("ackCount", 0);
         } else {
-            int totalCount = 0, dlqCount = 0;
+            int totalCount = 0, dlqCount = 0, ackCount = 0;
             for (String countKey : countKeys) {
                 Integer totalCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(countKey, "total-count"))
                         .map(value -> Integer.parseInt(value.toString()))
                         .orElse(0);
                 totalCount += totalCountValue;
+
+                Integer ackCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(countKey, "ack-count"))
+                        .map(value -> Integer.parseInt(value.toString()))
+                        .orElse(0);
+                ackCount += ackCountValue;
 
                 Integer dlqCountValue = Optional.ofNullable(stringRedisTemplate.opsForHash().get(countKey, "dlq-count"))
                         .map(value -> Integer.parseInt(value.toString()))
@@ -62,6 +68,7 @@ public class IndexParamServiceImpl implements IndexParamService {
             }
             map.put("totalCount", totalCount);
             map.put("dlqCount", dlqCount);
+            map.put("ackCount", ackCount);
         }
         Set<String> delayKeys = stringRedisTemplate.keys(Constants.DELAY_MESSAGE_TTL_PREFIX_KEY + "*");
         if (delayKeys == null || delayKeys.isEmpty()) {
@@ -85,6 +92,7 @@ public class IndexParamServiceImpl implements IndexParamService {
         List<Integer> newNum_list = new ArrayList<>();
         List<Integer> successNum_list = new ArrayList<>();
         List<Integer> failNum_list = new ArrayList<>();
+        List<Integer> unConsume_list = new ArrayList<>();
 
         // 创建一个 SimpleDateFormat 对象，指定日期格式
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -102,6 +110,7 @@ public class IndexParamServiceImpl implements IndexParamService {
         int newNum_total = 0;
         int successNum_total = 0;
         int failNum_total = 0;
+        int unConsume_total = 0;
 
         long start = startDate.getTime() / (24 * 60 * 60 * 1000) + 1;
         long end = endDate.getTime() / (24 * 60 * 60 * 1000) + 1;
@@ -110,26 +119,31 @@ public class IndexParamServiceImpl implements IndexParamService {
             Map<String, Integer> map = this.getCount(i);
             int newNum = map.get("totalCount");
             int failNum = map.get("dlqCount");
-            int successNum = newNum - failNum;
+            int successNum = map.get("ackCount");
+            int unConsumeNum = newNum - failNum - successNum;
 
             newNum_list.add(newNum);
             successNum_list.add(successNum);
             failNum_list.add(failNum);
+            unConsume_list.add(unConsumeNum);
 
             newNum_total += newNum;
             successNum_total += successNum;
             failNum_total += failNum;
+            unConsume_total += unConsumeNum;
         }
 
         Map<String, Object> result = new HashMap<>();
         result.put("messageDay_list", messageDay_list);
         result.put("newNum_list", newNum_list);
+        result.put("unConsume_list", unConsume_list);
         result.put("successNum_list", successNum_list);
         result.put("failNum_list", failNum_list);
 
         result.put("newNum_total", newNum_total);
         result.put("successNum_total", successNum_total);
         result.put("failNum_total", failNum_total);
+        result.put("unConsume_total", unConsume_total);
 
         return new ReturnT<>(result);
     }

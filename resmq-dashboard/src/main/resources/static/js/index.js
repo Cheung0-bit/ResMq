@@ -117,7 +117,7 @@ $(function () {
                     type: 'line',
                     stack: 'Total',
                     areaStyle: {normal: {}},
-                    data: data.data.newNum_list
+                    data: data.data.unConsume_list
                 }, {
                     name: '消费成功',
                     type: 'line',
@@ -167,7 +167,7 @@ $(function () {
                     data: [
                         {
                             name: '未消费',
-                            value: data.data.newNum_total
+                            value: data.data.unConsume_list
                         },
                         {
                             name: '消费成功',
